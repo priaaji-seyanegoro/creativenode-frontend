@@ -8,13 +8,14 @@ import {
   Button,
   useColorMode,
 } from "@chakra-ui/core";
+import "./header-style.css";
 
 export const Header = (props) => {
   const [show, setShow] = React.useState(false);
   const { colorMode } = useColorMode();
-  const bgColor = { light: "white.500", dark: "gray.800" };
+  const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
-  const borderColor = { light: "black", dark: "white" };
+  const borderColor = { light: "black", dark: "gray.800" };
 
   const handleToggle = () => setShow(!show);
 
@@ -25,14 +26,20 @@ export const Header = (props) => {
       justify="space-between"
       wrap="wrap"
       padding="1.5rem"
+      borderBottom="1px"
+      borderBottomColor={borderColor[colorMode]}
       bg={bgColor[colorMode]}
       color={color[colorMode]}
-      borderColor={borderColor[colorMode]}
-      boxShadow="lg"
+      width="100%"
+      position="fixed"
+      top="0"
+      zIndex={2}
       {...props}
     >
       <Flex align="center" mr={5}>
         <Heading
+          className="menu-items"
+          cursor="pointer"
           as="h1"
           size="lg"
           letterSpacing={"2px"}
@@ -42,7 +49,10 @@ export const Header = (props) => {
         </Heading>
       </Flex>
 
-      <Box display={{ xs: "block", md: "none" }}>
+      <Box
+        display={{ xs: "block", md: "none" }}
+        transition="display 1s ease-out"
+      >
         <Box display="flex">
           <ThemeToggle />
 
@@ -65,10 +75,12 @@ export const Header = (props) => {
         alignItems="center"
         textTransform="uppercase"
         fontWeight="bold"
+        cursor="pointer"
       >
         <MenuItems>Discovery</MenuItems>
         <MenuItems>Contact Us</MenuItems>
         <Button
+          className="menu-items"
           bg="transparent"
           border="1px"
           mt={{ base: 4, md: 0 }}
@@ -79,7 +91,7 @@ export const Header = (props) => {
           fontWeight="bold"
           fontSize={["xs", "sm", "md", "lg", "xl"]}
         >
-          Create Podcast
+          Sign In
         </Button>
         <Box display={{ xs: "none", md: "block" }}>
           <ThemeToggle />
@@ -91,6 +103,7 @@ export const Header = (props) => {
 
 const MenuItems = ({ children }) => (
   <Text
+    className="menu-items"
     mt={{ base: 4, md: 0 }}
     mr={6}
     display="block"

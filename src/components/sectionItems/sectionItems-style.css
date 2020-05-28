@@ -1,0 +1,6 @@
+@media screen and (max-width: 1023px) {
+  .container-two {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+}

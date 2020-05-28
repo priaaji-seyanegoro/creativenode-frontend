@@ -1,0 +1,16 @@
+@media screen and (max-width: 1023px) {
+  .container-two {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  .section_one_right {
+    display: none;
+  }
+  .section_one_left {
+    margin: 10%;
+  }
+
+  .section_one_left_btn {
+    width: 150px;
+  }
+}
