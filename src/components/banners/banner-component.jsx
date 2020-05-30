@@ -1,6 +1,7 @@
 import React from "react";
 import { SectionItems } from "../sectionItems/sectionItem-component";
 import { Box, Text, Image, useColorMode, Button, Flex } from "@chakra-ui/core";
+import { dataSectionItems } from "./dataSectionItems"
 import "./banner-style.css";
 
 export const Banner = () => {
@@ -68,19 +69,12 @@ export const Banner = () => {
           podcast from any device, for free.
         </Text>
       </Box>
-      <SectionItems
-        pathImage="/info-img-1.png"
-        headTitle="Easy-to-upload your podcast"
-        descTitle="You can post your record podcast on this platfrom and your fans can access this platfrom"
-        positionImage="left"
-      />
 
-      <SectionItems
-        pathImage="/info-img-2.png"
-        headTitle="Streaming your podcast everywhere & anytime"
-        descTitle="Creative Nodes platfrom based (PWA) Progressive Web Application, you can streaming podcast without installing but apps feels like native apps just add to homescreen"
-        positionImage="right"
-      />
+      {
+        dataSectionItems.map(({id , ...otherProps}) => (
+          <SectionItems key={id} {...otherProps}/>
+        ))
+      }
     </>
   );
 };
