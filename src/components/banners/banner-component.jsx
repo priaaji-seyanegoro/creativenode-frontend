@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { SectionItems } from "../sectionItems/sectionItem-component";
 import { Box, Text, Image, useColorMode, Button, Flex } from "@chakra-ui/core";
-import { dataSectionItems } from "./dataSectionItems"
+import { dataSectionItems } from "./dataSectionItems";
 import "./banner-style.css";
 
 export const Banner = () => {
@@ -29,18 +30,20 @@ export const Banner = () => {
           <Text fontSize={["xs", "sm", "md", "lg", "xl"]} mb="4%">
             Everything you need, 100% free.
           </Text>
-          <Button
-            className="section_one_left_btn"
-            variantColor="teal"
-            variant="solid"
-            width={["170px", "270px", "370px", "370px"]}
-            fontWeight="700"
-            rounded="400px"
-            fontSize={["xs", "sm", "md", "lg", "xl"]}
-            shadow="md"
-          >
-            Make your podcast
-          </Button>
+          <Link to="/signin">
+            <Button
+              className="section_one_left_btn"
+              variantColor="teal"
+              variant="solid"
+              width={["170px", "270px", "370px", "370px"]}
+              fontWeight="700"
+              rounded="400px"
+              fontSize={["xs", "sm", "md", "lg", "xl"]}
+              shadow="md"
+            >
+              Make your podcast
+            </Button>
+          </Link>
         </Box>
         <Box className="section_one_right" w="100%">
           <Image
@@ -70,11 +73,9 @@ export const Banner = () => {
         </Text>
       </Box>
 
-      {
-        dataSectionItems.map(({id , ...otherProps}) => (
-          <SectionItems key={id} {...otherProps}/>
-        ))
-      }
+      {dataSectionItems.map(({ id, ...otherProps }) => (
+        <SectionItems key={id} {...otherProps} />
+      ))}
     </>
   );
 };

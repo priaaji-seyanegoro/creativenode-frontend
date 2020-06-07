@@ -1,19 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { ColorModeProvider, ThemeProvider, CSSReset } from "@chakra-ui/core";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <ThemeProvider>
       <ColorModeProvider>
         <CSSReset />
-        <App />
-      </ColorModeProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </ColorModeProvider>
+      </ThemeProvider>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

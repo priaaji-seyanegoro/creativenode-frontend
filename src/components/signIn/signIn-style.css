@@ -1,0 +1,6 @@
+@media screen and (max-width: 1023px) {
+  .box-signin {
+    padding-left: 15% !important;
+    padding-right: 15% !important;
+  }
+}

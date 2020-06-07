@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ThemeToggle } from "../theme_toggle/index";
 import {
   Box,
@@ -15,7 +16,7 @@ export const Header = (props) => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
-  const borderColor = { light: "black", dark: "gray.800" };
+  const borderColor = { light: "black", dark: "white" };
 
   const handleToggle = () => setShow(!show);
 
@@ -33,20 +34,22 @@ export const Header = (props) => {
       width="100%"
       position="fixed"
       top="0"
-      zIndex={2}
+      zIndex="docked"
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Heading
-          className="menu-items"
-          cursor="pointer"
-          as="h1"
-          size="lg"
-          letterSpacing={"2px"}
-          fontSize={["xs", "sm", "md", "lg", "xl"]}
-        >
-          CREATIVE NODES
-        </Heading>
+        <Link to="/">
+          <Heading
+            className="menu-items"
+            cursor="pointer"
+            as="h1"
+            size="lg"
+            letterSpacing={"2px"}
+            fontSize={["xs", "sm", "md", "lg", "xl"]}
+          >
+            CREATIVE NODES
+          </Heading>
+        </Link>
       </Flex>
 
       <Box
@@ -77,22 +80,29 @@ export const Header = (props) => {
         fontWeight="bold"
         cursor="pointer"
       >
-        <MenuItems>Discovery</MenuItems>
-        <MenuItems>Contact Us</MenuItems>
-        <Button
-          className="menu-items"
-          bg="transparent"
-          border="1px"
-          mt={{ base: 4, md: 0 }}
-          mr={6}
-          display="block"
-          textTransform="uppercase"
-          boxShadow="md"
-          fontWeight="bold"
-          fontSize={["xs", "sm", "md", "lg", "xl"]}
-        >
-          Sign In
-        </Button>
+        <Link to="/discovery">
+          <MenuItems action={handleToggle}>Discovery</MenuItems>
+        </Link>
+        <Link to="/contactus">
+          <MenuItems action={handleToggle}>Contact Us</MenuItems>
+        </Link>
+        <Link to="signin">
+          <Button
+            className="menu-items"
+            bg="transparent"
+            border="1px"
+            mt={{ base: 4, md: 0 }}
+            mr={6}
+            display="block"
+            textTransform="uppercase"
+            boxShadow="md"
+            fontWeight="bold"
+            fontSize={["xs", "sm", "md", "lg", "xl"]}
+            onClick={handleToggle}
+          >
+            Sign In
+          </Button>
+        </Link>
         <Box display={{ xs: "none", md: "block" }}>
           <ThemeToggle />
         </Box>
@@ -101,13 +111,14 @@ export const Header = (props) => {
   );
 };
 
-const MenuItems = ({ children }) => (
+const MenuItems = ({ children, action }) => (
   <Text
     className="menu-items"
     mt={{ base: 4, md: 0 }}
     mr={6}
     display="block"
     fontSize={["xs", "sm", "md", "lg", "xl"]}
+    onClick={action}
   >
     {children}
   </Text>
