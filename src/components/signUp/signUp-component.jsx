@@ -145,7 +145,7 @@ export const SignUp = () => {
                 rounded="400px"
                 textTransform="uppercase"
               >
-                Login
+                sign up
               </Button>
             </Stack>
           </form>

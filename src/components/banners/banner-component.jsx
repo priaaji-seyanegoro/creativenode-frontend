@@ -1,4 +1,5 @@
 import React from "react";
+import Typist from "react-typist";
 import { Link } from "react-router-dom";
 import { SectionItems } from "../sectionItems/sectionItem-component";
 import { Box, Text, Image, useColorMode, Button, Flex } from "@chakra-ui/core";
@@ -24,12 +25,15 @@ export const Banner = () => {
         mt="80px"
       >
         <Box className="section_one_left" w="100%">
-          <Text fontSize={["xl", "2xl", "3xl", "4xl", "6xl"]} mb="4%">
-            The easiest way to stream a podcast.
-          </Text>
-          <Text fontSize={["xs", "sm", "md", "lg", "xl"]} mb="4%">
-            Everything you need, 100% free.
-          </Text>
+          <Typist cursor={{ show: false }}>
+            <Text fontSize={["xl", "2xl", "3xl", "4xl", "6xl"]} mb="4%">
+              The easiest way to stream a podcast.
+            </Text>
+
+            <Text fontSize={["xs", "sm", "md", "lg", "xl"]} mb="4%">
+              Everything you need, 100% free.
+            </Text>
+          </Typist>
           <Link to="/signin">
             <Button
               className="section_one_left_btn"

@@ -1,7 +1,8 @@
 import React from "react";
+import { CardContact } from "../components/card-contact/card-contact-component";
 
 export const ContactUs = () => (
   <React.Fragment>
-    <h1 mt="80px">Discovery Page</h1>
+    <CardContact />
   </React.Fragment>
 );
