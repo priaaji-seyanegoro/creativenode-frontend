@@ -1,19 +1,20 @@
 import React from "react";
-import { Box, SimpleGrid } from "@chakra-ui/core";
+import { Flex } from "@chakra-ui/core";
+import { SearchFrom } from "../components/search_form/search-form-component";
 
-export const Discovery = () => (
-  <React.Fragment>
-    <SimpleGrid
-      columns={{ xs: 2, sm: 3, md: 4 }}
-      spacing="40px"
-      mt="8%"
-      p="30px"
-    >
-      <Box bg="tomato" height="80px"></Box>
-      <Box bg="tomato" height="80px"></Box>
-      <Box bg="tomato" height="80px"></Box>
-      <Box bg="tomato" height="80px"></Box>
-      <Box bg="tomato" height="80px"></Box>
-    </SimpleGrid>
-  </React.Fragment>
-);
+export const Discovery = () => {
+  return (
+    <React.Fragment>
+      <Flex
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        textTransform="uppercase"
+        mt="30px"
+      >
+        <SearchFrom />
+      </Flex>
+    </React.Fragment>
+  );
+};

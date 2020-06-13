@@ -21,7 +21,7 @@ export const CardContact = () => (
         rounded="full"
         size="150px"
         src="https://pbs.twimg.com/profile_images/1263272078850981888/gKmTGuxp_400x400.jpg"
-        alt="Segun Adebayo"
+        alt="priajisn"
         mb="20px"
       />
       <Box ml="3">
