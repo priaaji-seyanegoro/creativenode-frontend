@@ -14,13 +14,16 @@ import {
   InputRightElement,
   Stack,
   useColorMode,
+  useToast,
 } from "@chakra-ui/core";
 import "./signUp-style.css";
 
 export const SignUp = () => {
   const [showPass, setShowPass] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const { colorMode } = useColorMode();
+  const toast = useToast();
 
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
@@ -30,11 +33,41 @@ export const SignUp = () => {
     setShowPass(!showPass);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    e.target.reset();
-    console.log("Submitted!");
-  }
+    e.persist();
+    const { namaPodcast, email, password } = e.target.elements;
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/user/auth/register",
+        {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            namePodcast: namaPodcast.value,
+            email: email.value,
+            password: password.value,
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setSubmit(false);
+      toast({
+        title: "Register successfuly",
+        description: `${data.error}`,
+        status: "success",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      e.target.reset();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Flex>
@@ -68,8 +101,8 @@ export const SignUp = () => {
                     id="name-podcast"
                     placeholder="Nama Podcast Anda"
                     border="1px"
+                    name="namaPodcast"
                     borderColor={borderColor[colorMode]}
-                    autoComplete="off"
                   />
                 </InputGroup>
               </FormControl>
@@ -84,7 +117,7 @@ export const SignUp = () => {
                     placeholder="Email Anda"
                     border="1px"
                     borderColor={borderColor[colorMode]}
-                    autoComplete="off"
+                    name="email"
                   />
                 </InputGroup>
               </FormControl>
@@ -99,6 +132,7 @@ export const SignUp = () => {
                     placeholder="Password Anda"
                     border="1px"
                     borderColor={borderColor[colorMode]}
+                    name="password"
                   />
                   <InputRightElement>
                     <IconButton
@@ -135,18 +169,34 @@ export const SignUp = () => {
                 </InputGroup>
               </FormControl>
               <Divider border="1px" borderColor={borderColor[colorMode]} />
-              <Button
-                variantColor="teal"
-                variant="solid"
-                type="submit"
-                shadow="md"
-                fontWeight="700"
-                letterSpacing={"2px"}
-                rounded="400px"
-                textTransform="uppercase"
-              >
-                sign up
-              </Button>
+              {!submit ? (
+                <Button
+                  variantColor="teal"
+                  variant="solid"
+                  type="submit"
+                  shadow="md"
+                  fontWeight="700"
+                  letterSpacing={"2px"}
+                  rounded="400px"
+                  textTransform="uppercase"
+                >
+                  Register
+                </Button>
+              ) : (
+                <Button
+                  isLoading
+                  loadingText="Submitting"
+                  variantColor="teal"
+                  variant="solid"
+                  shadow="md"
+                  fontWeight="700"
+                  letterSpacing={"2px"}
+                  rounded="400px"
+                  textTransform="uppercase"
+                >
+                  Submit
+                </Button>
+              )}
             </Stack>
           </form>
         </Stack>

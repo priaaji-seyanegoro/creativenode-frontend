@@ -13,14 +13,17 @@ import {
   InputLeftElement,
   InputRightElement,
   Stack,
+  useToast,
   useColorMode,
 } from "@chakra-ui/core";
 import "./signIn-style.css";
 
 export const SignIn = () => {
   const [showPass, setShowPass] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const { colorMode } = useColorMode();
+  const toast = useToast();
 
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
@@ -30,11 +33,48 @@ export const SignIn = () => {
     setShowPass(!showPass);
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    e.target.reset();
-    console.log("Submitted!");
-  }
+    e.persist();
+    const { emailInput, passwordInput } = e.target.elements;
+    setSubmit(true);
+
+    const response = await fetch("http://localhost:5000/api/user/auth/login", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailInput.value,
+        password: passwordInput.value,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status) {
+      console.log(data.user);
+      setSubmit(false);
+      toast({
+        title: "Login successfuly",
+
+        status: "success",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      e.target.reset();
+    } else {
+      setSubmit(false);
+      toast({
+        title: "Login fail",
+        description: `${data.error}`,
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Flex>
@@ -69,7 +109,7 @@ export const SignIn = () => {
                     placeholder="Ketik Email Anda"
                     border="1px"
                     borderColor={borderColor[colorMode]}
-                    autoComplete="off"
+                    name="emailInput"
                   />
                 </InputGroup>
               </FormControl>
@@ -83,6 +123,7 @@ export const SignIn = () => {
                     type={showPass ? "text" : "password"}
                     placeholder="Ketik Password Anda"
                     border="1px"
+                    name="passwordInput"
                     borderColor={borderColor[colorMode]}
                   />
                   <InputRightElement>
@@ -97,18 +138,35 @@ export const SignIn = () => {
                 </InputGroup>
               </FormControl>
               <Divider border="1px" borderColor={borderColor[colorMode]} />
-              <Button
-                variantColor="teal"
-                variant="solid"
-                type="submit"
-                shadow="md"
-                fontWeight="700"
-                letterSpacing={"2px"}
-                rounded="400px"
-                textTransform="uppercase"
-              >
-                Login
-              </Button>
+
+              {!submit ? (
+                <Button
+                  variantColor="teal"
+                  variant="solid"
+                  type="submit"
+                  shadow="md"
+                  fontWeight="700"
+                  letterSpacing={"2px"}
+                  rounded="400px"
+                  textTransform="uppercase"
+                >
+                  Login
+                </Button>
+              ) : (
+                <Button
+                  isLoading
+                  loadingText="Submitting"
+                  variantColor="teal"
+                  variant="solid"
+                  shadow="md"
+                  fontWeight="700"
+                  letterSpacing={"2px"}
+                  rounded="400px"
+                  textTransform="uppercase"
+                >
+                  Submit
+                </Button>
+              )}
             </Stack>
           </form>
         </Stack>
