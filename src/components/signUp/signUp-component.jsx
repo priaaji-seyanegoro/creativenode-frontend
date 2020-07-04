@@ -15,7 +15,9 @@ import {
   Stack,
   useColorMode,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/core";
+import { useForm } from "react-hook-form";
 import "./signUp-style.css";
 
 export const SignUp = () => {
@@ -28,44 +30,62 @@ export const SignUp = () => {
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
 
+  const { register, errors, handleSubmit } = useForm();
+
   function handleToggle(e) {
     e.preventDefault();
     setShowPass(!showPass);
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    e.persist();
-    const { namaPodcast, email, password } = e.target.elements;
-
-    try {
+  const onSignUp = async (data, e) => {
+    console.log(data);
+    setSubmit(true);
+    if (data.password !== data.confirmPassword) {
+      toast({
+        title: "Password tidak sama",
+        description: "Pastikan password dan confirm password sama",
+        status: "error",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
+      setSubmit(false);
+    } else {
       const response = await fetch(
         "http://localhost:5000/api/user/auth/register",
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            namePodcast: namaPodcast.value,
-            email: email.value,
-            password: password.value,
+            namePodcast: data.namaPodcast,
+            email: data.email,
+            password: data.password,
           }),
         }
       );
-      const data = await response.json();
-      console.log(data);
-      setSubmit(false);
-      toast({
-        title: "Register successfuly",
-        description: `${data.error}`,
-        status: "success",
-        position: "top",
-        duration: 3000,
-        isClosable: true,
-      });
-
-      e.target.reset();
-    } catch (err) {
-      console.log(err);
+      const result = await response.json();
+      if (result.status) {
+        setSubmit(false);
+        console.log(result);
+        toast({
+          title: "Sign Up successfuly",
+          status: "success",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.reset();
+      } else {
+        setSubmit(false);
+        toast({
+          title: "Fail successfuly",
+          description: `${result.error}`,
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -90,9 +110,9 @@ export const SignUp = () => {
             sign up to creative node
           </Heading>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSignUp)}>
             <Stack spacing={4}>
-              <FormControl isRequired pb="1em">
+              <FormControl isInvalid={errors.namaPodcast}>
                 <InputGroup>
                   <InputLeftElement>
                     <Icon name="info" />
@@ -103,11 +123,22 @@ export const SignUp = () => {
                     border="1px"
                     name="namaPodcast"
                     borderColor={borderColor[colorMode]}
+                    ref={register({
+                      required: true,
+                      maxLength: 32,
+                    })}
+                    autoComplete="off"
                   />
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.namaPodcast?.type === "required" &&
+                    "Nama Podcast required"}
+                  {errors.namaPodcast?.type === "maxLength" &&
+                    "Max Input 120 Character"}
+                </FormErrorMessage>
               </FormControl>
 
-              <FormControl isRequired pb="1em">
+              <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement>
                     <Icon name="email" />
@@ -118,10 +149,20 @@ export const SignUp = () => {
                     border="1px"
                     borderColor={borderColor[colorMode]}
                     name="email"
+                    ref={register({
+                      required: true,
+                      pattern: /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    })}
+                    autoComplete="off"
                   />
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.email?.type === "required" && "Email required"}
+                  {errors.email?.type === "pattern" &&
+                    "Your input must be an email"}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl isRequired>
+              <FormControl isInvalid={errors.password}>
                 <InputGroup>
                   <InputLeftElement>
                     <Icon name="lock" />
@@ -133,6 +174,10 @@ export const SignUp = () => {
                     border="1px"
                     borderColor={borderColor[colorMode]}
                     name="password"
+                    ref={register({
+                      required: true,
+                      minLength: 6,
+                    })}
                   />
                   <InputRightElement>
                     <IconButton
@@ -144,8 +189,14 @@ export const SignUp = () => {
                     />
                   </InputRightElement>
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.password?.type === "required" && "Password Required"}
+                  {errors.password?.type === "minLength" &&
+                    "Password minimal 6 charachter"}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl isRequired>
+
+              <FormControl isInvalid={errors.confirmPassword}>
                 <InputGroup>
                   <InputLeftElement>
                     <Icon name="lock" />
@@ -156,6 +207,11 @@ export const SignUp = () => {
                     placeholder="Konfirmasi Password Anda"
                     border="1px"
                     borderColor={borderColor[colorMode]}
+                    name="confirmPassword"
+                    ref={register({
+                      required: true,
+                      minLength: 6,
+                    })}
                   />
                   <InputRightElement>
                     <IconButton
@@ -167,6 +223,12 @@ export const SignUp = () => {
                     />
                   </InputRightElement>
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.confirmPassword?.type === "required" &&
+                    "Password Required"}
+                  {errors.confirmPassword?.type === "minLength" &&
+                    "Password minimal 6 charachter"}
+                </FormErrorMessage>
               </FormControl>
               <Divider border="1px" borderColor={borderColor[colorMode]} />
               {!submit ? (
