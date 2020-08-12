@@ -1,3 +1,7 @@
 .menu-items:hover {
   color: #8940fa;
 }
+
+.active {
+  color: #8940fa;
+}

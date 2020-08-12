@@ -1,0 +1,11 @@
+@media screen and (max-width: 399px) {
+  .trending-items {
+    margin-left: 0 !important;
+  }
+}
+
+.title-podcast {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

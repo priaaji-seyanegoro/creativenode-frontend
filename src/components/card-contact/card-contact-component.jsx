@@ -20,7 +20,7 @@ export const CardContact = () => (
       <Image
         rounded="full"
         size="150px"
-        src="https://pbs.twimg.com/profile_images/1263272078850981888/gKmTGuxp_400x400.jpg"
+        src="https://pbs.twimg.com/media/D09ccmlVsAE5qOY?format=jpg&name=small"
         alt="priajisn"
         mb="20px"
       />

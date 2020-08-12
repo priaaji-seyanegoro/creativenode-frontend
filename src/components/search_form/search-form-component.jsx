@@ -11,7 +11,7 @@ import {
   InputGroup,
   useColorMode,
 } from "@chakra-ui/core";
-import { PreviewTrendingItems } from "../preview-trending-items/preview-trending-component";
+
 import "./search-form-style.css";
 
 export const SearchFrom = () => {
@@ -72,8 +72,6 @@ export const SearchFrom = () => {
       >
         Hear what’s trending for free in the Creative Node community
       </Text>
-
-      <PreviewTrendingItems className="preview-trending-items" />
     </>
   );
 };

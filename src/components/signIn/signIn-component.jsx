@@ -18,6 +18,7 @@ import {
   useColorMode,
 } from "@chakra-ui/core";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import "./signIn-style.css";
 
 export const SignIn = () => {
@@ -26,6 +27,7 @@ export const SignIn = () => {
 
   const { colorMode } = useColorMode();
   const toast = useToast();
+  const history = useHistory();
 
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
@@ -61,6 +63,7 @@ export const SignIn = () => {
         isClosable: true,
       });
       e.target.reset();
+      history.push("/dashboard");
     } else {
       setSubmit(false);
       toast({

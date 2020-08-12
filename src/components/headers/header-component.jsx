@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { ThemeToggle } from "../theme_toggle/index";
 import {
   Box,
@@ -38,7 +38,7 @@ export const Header = (props) => {
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Link to="/">
+        <Link to="/dashboard">
           <Heading
             className="menu-items"
             cursor="pointer"
@@ -80,12 +80,15 @@ export const Header = (props) => {
         fontWeight="bold"
         cursor="pointer"
       >
-        <Link to="/discovery">
+        <NavLink to="/episodes" activeClassName="active">
+          <MenuItems action={handleToggle}>Episodes</MenuItems>
+        </NavLink>
+        <NavLink to="/discovery" activeClassName="active">
           <MenuItems action={handleToggle}>Discovery</MenuItems>
-        </Link>
-        <Link to="/contactus">
+        </NavLink>
+        <NavLink to="/contactus" activeClassName="active">
           <MenuItems action={handleToggle}>Contact Us</MenuItems>
-        </Link>
+        </NavLink>
         <Link to="signin">
           <Button
             className="menu-items"
@@ -100,7 +103,7 @@ export const Header = (props) => {
             fontSize={["xs", "sm", "md", "lg", "xl"]}
             onClick={handleToggle}
           >
-            Sign In
+            Sign Out
           </Button>
         </Link>
         <Box display={{ xs: "none", md: "block" }}>
