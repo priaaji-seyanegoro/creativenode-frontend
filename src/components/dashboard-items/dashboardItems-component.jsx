@@ -33,7 +33,7 @@ export const DashboardItems = () => {
           <Item
             id="5ee962fb2bd83e27c0fb0581"
             imageSrc="https://s3-us-west-2.amazonaws.com/anchor-generated-image-bank/production/podcast_uploaded_nologo400/1884846/1884846-1583487057675-f485ef1ea4bfe.jpg"
-            podcastName="BKR Brothers podcastttttttttttttttttttttttttttttttttttttttttttt"
+            podcastName="BKR Brothers podcast"
             title="#51 SARUNG PANJANG SUMBU PENDEK"
           />
         </Box>
