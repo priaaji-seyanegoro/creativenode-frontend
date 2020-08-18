@@ -11,7 +11,6 @@ import {
   Collapse,
   Badge,
 } from "@chakra-ui/core";
-import { useParams } from "react-router-dom";
 
 export const PodcastDetail = () => {
   const [show, setShow] = React.useState(false);
@@ -19,7 +18,7 @@ export const PodcastDetail = () => {
 
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
-  const { podcastId } = useParams();
+
   return (
     <>
       <Flex justifyContent="center" mt="11%">
