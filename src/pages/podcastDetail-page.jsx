@@ -12,6 +12,8 @@ import {
   Badge,
 } from "@chakra-ui/core";
 
+import "./podcastDetail-style.css";
+
 export const PodcastDetail = () => {
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -21,8 +23,8 @@ export const PodcastDetail = () => {
 
   return (
     <>
-      <Flex justifyContent="center" mt="11%">
-        <Flex flexDirection="column">
+      <Flex justifyContent="center" mt="11%" className="wrap">
+        <Flex className="section-1" flexDirection="column">
           <Image
             src="https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_episode400/812386/812386-1588677350101-c4d4427d5d40f.jpg"
             size="300px"
@@ -34,6 +36,7 @@ export const PodcastDetail = () => {
           <Flex align="center" justifyContent="space-around" mb="20px">
             <Button
               className="menu-items"
+              id="play-button"
               bg="transparent"
               border="1px"
               width="200px"
@@ -69,7 +72,7 @@ export const PodcastDetail = () => {
             </Tooltip>
           </Flex>
         </Flex>
-        <Flex flexDirection="column" ml="3%">
+        <Flex flexDirection="column" ml="3%" className="section-2">
           <Text fontSize={["xl", "2xl", "3xl", "4xl", "5xl"]} fontWeight="700">
             Thirty Days Of Lunch Podcast
           </Text>
@@ -81,6 +84,7 @@ export const PodcastDetail = () => {
           <Divider borderColor={color[colorMode]} />
 
           <Collapse
+            className="collapse"
             textAlign="justify"
             width="700px"
             fontSize={["xs", "sm", "md", "lg", "xl"]}

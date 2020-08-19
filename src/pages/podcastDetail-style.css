@@ -1,0 +1,26 @@
+@media screen and (max-width: 1023px) {
+  .wrap {
+    flex-direction: column !important;
+    margin-top: 120px !important;
+    text-align: center !important;
+  }
+
+  .section-1 {
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+
+  #play-button {
+    margin-right: 10px !important;
+  }
+
+  .section-2 {
+    margin-right: 13px !important;
+    margin-left: 13px !important;
+    margin-bottom: 13px !important;
+  }
+
+  .collapse {
+    width: 100% !important;
+  }
+}

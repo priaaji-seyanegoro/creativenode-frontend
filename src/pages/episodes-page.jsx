@@ -12,7 +12,7 @@ export const Episodes = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "ID",
+        Header: "No",
         accessor: "id",
       },
       {
