@@ -1,22 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import store from "./redux/store";
 import { ColorModeProvider, ThemeProvider, CSSReset } from "@chakra-ui/core";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <ThemeProvider>
-      <ColorModeProvider>
-        <CSSReset />
+  <Provider store={store}>
+    <BrowserRouter>
+      <ThemeProvider>
+        <ColorModeProvider>
+          <CSSReset />
           <React.StrictMode>
             <App />
           </React.StrictMode>
         </ColorModeProvider>
       </ThemeProvider>
-  </BrowserRouter>,
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

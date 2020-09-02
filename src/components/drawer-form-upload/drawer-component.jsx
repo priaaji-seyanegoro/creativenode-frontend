@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Drawer,
@@ -10,20 +10,134 @@ import {
   useDisclosure,
   Button,
   Stack,
-  Box,
   FormLabel,
   Input,
   useColorMode,
   Textarea,
   DrawerCloseButton,
+  FormErrorMessage,
+  FormControl,
+  useToast,
 } from "@chakra-ui/core";
+import { useForm } from "react-hook-form";
+import Cookie from "js-cookie";
 
 export function DrawerUpload() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef();
   const btnRef = React.useRef();
   const { colorMode } = useColorMode();
+  const toast = useToast();
   const borderColor = { light: "black", dark: "white" };
+
+  const [submit, setSubmit] = useState(false);
+  const { register, errors, handleSubmit } = useForm();
+
+  const validCover = (data) => {
+    console.log(data.cover[0].type);
+    if (
+      data.cover[0].type !== "image/jpeg" &&
+      data.cover[0].type !== "image/png"
+    ) {
+      toast({
+        title: "Warning file type",
+        description: "Cover Podcast only support jpeg or png",
+        status: "warning",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    } else if (data.cover[0].size > 100000) {
+      console.log("cover", data.cover[0].size);
+      toast({
+        title: "Warning file size",
+        description:
+          "Cover Podcast is too large 'MAX 1MB', please pick a smaller file",
+        status: "warning",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const validAudio = (data) => {
+    console.log("audio", data.audio[0].type);
+    if (data.audio[0].type !== "audio/mpeg") {
+      toast({
+        title: "Warning file type",
+        description: "Audio Podcast only support MP3",
+        status: "warning",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    } else if (data.audio[0].size > 50000000) {
+      console.log("audio", data.audio[0].size);
+      toast({
+        title: "Warning file size",
+        description:
+          "Audio Podcast is too large 'MAX 50MB', please pick a smaller file",
+        status: "warning",
+        position: "top",
+        duration: 9000,
+        isClosable: true,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  //UPLOAD ACTIONS
+  const onUpload = async (data, e) => {
+    setSubmit(true);
+
+    if (!validCover(data) || !validAudio(data)) {
+      setSubmit(false);
+    } else {
+      //APPEND ALL INPUT DATA  TO FORMDATA
+      const formData = new FormData();
+      formData.append("title", data.titleInput);
+      formData.append("audio", data.audio[0]);
+      formData.append("coverImage", data.cover[0]);
+      formData.append("description", data.descInput);
+
+      const response = await fetch("http://localhost:5000/api/podcast/", {
+        method: "post",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+        body: formData,
+      });
+      const result = await response.json();
+
+      if (result.status) {
+        setSubmit(false);
+        toast({
+          title: "Uploading successfuly",
+          status: "success",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.reset();
+        console.log(result);
+      } else {
+        setSubmit(false);
+        toast({
+          title: "Uploading Fail",
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -41,6 +155,7 @@ export function DrawerUpload() {
       >
         Upload New Podcast
       </Button>
+
       <Drawer
         isOpen={isOpen}
         placement="bottom"
@@ -51,55 +166,103 @@ export function DrawerUpload() {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
+
           <DrawerHeader borderBottomWidth="1px">
             Create a new podcast
           </DrawerHeader>
 
-          <DrawerBody>
-            <Stack spacing="24px">
-              <Box>
-                <FormLabel htmlFor="title">Title</FormLabel>
-                <Input
-                  ref={firstField}
-                  id="title"
-                  placeholder="Please enter title podcast"
-                  borderColor={borderColor[colorMode]}
-                />
-              </Box>
+          <form onSubmit={handleSubmit(onUpload)}>
+            <DrawerBody>
+              <Stack spacing="24px">
+                <FormControl isInvalid={errors.titleInput}>
+                  <FormLabel htmlFor="title">Title</FormLabel>
+                  <Input
+                    name="titleInput"
+                    placeholder="Please enter title podcast"
+                    ref={register({
+                      required: true,
+                    })}
+                    autoComplete="off"
+                    borderColor={borderColor[colorMode]}
+                  />
+                  <FormErrorMessage>
+                    {errors.titleInput?.type === "required" &&
+                      "Title Podcast required"}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <Box>
-                <FormLabel htmlFor="file-podcast">Cover Podcast</FormLabel>
-                <Input
-                  type="file"
-                  id="cover"
-                  pt="4px"
-                  borderColor={borderColor[colorMode]}
-                />
-              </Box>
+                <FormControl isInvalid={errors.cover}>
+                  <FormLabel htmlFor="cover">Cover Podcast</FormLabel>
+                  <Input
+                    type="file"
+                    ref={register({
+                      required: true,
+                    })}
+                    name="cover"
+                    pt="4px"
+                    borderColor={borderColor[colorMode]}
+                  />
+                  <FormErrorMessage>
+                    {errors.cover?.type === "required" &&
+                      "Cover Podcast required"}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <Box>
-                <FormLabel htmlFor="file-podcast">File Podcast</FormLabel>
-                <Input
-                  type="file"
-                  id="file-podcast"
-                  pt="4px"
-                  borderColor={borderColor[colorMode]}
-                />
-              </Box>
+                <FormControl isInvalid={errors.audio}>
+                  <FormLabel htmlFor="podcastFile">File Podcast</FormLabel>
+                  <Input
+                    type="file"
+                    name="audio"
+                    ref={register({
+                      required: true,
+                    })}
+                    pt="4px"
+                    borderColor={borderColor[colorMode]}
+                  />
+                  <FormErrorMessage>
+                    {errors.audio?.type === "required" &&
+                      "Audio Podcast required"}
+                  </FormErrorMessage>
+                </FormControl>
 
-              <Box>
-                <FormLabel htmlFor="desc">Description</FormLabel>
-                <Textarea id="desc" borderColor={borderColor[colorMode]} />
-              </Box>
-            </Stack>
-          </DrawerBody>
+                <FormControl isInvalid={errors.descInput}>
+                  <FormLabel htmlFor="desc">Description</FormLabel>
+                  <Textarea
+                    name="descInput"
+                    ref={register({
+                      required: true,
+                    })}
+                    autoComplete="off"
+                    borderColor={borderColor[colorMode]}
+                  />
+                  <FormErrorMessage>
+                    {errors.descInput?.type === "required" &&
+                      "Description Podcast required"}
+                  </FormErrorMessage>
+                </FormControl>
+              </Stack>
+            </DrawerBody>
 
-          <DrawerFooter borderTopWidth="1px">
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variantColor="blue">Submit</Button>
-          </DrawerFooter>
+            <DrawerFooter borderTopWidth="1px">
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              {!submit ? (
+                <Button variantColor="blue" type="submit">
+                  Submit
+                </Button>
+              ) : (
+                <Button
+                  variantColor="blue"
+                  isLoading
+                  loadingText="Uploading"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              )}
+            </DrawerFooter>
+          </form>
         </DrawerContent>
       </Drawer>
     </>

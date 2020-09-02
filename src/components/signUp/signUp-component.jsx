@@ -68,7 +68,7 @@ export const SignUp = () => {
         setSubmit(false);
         console.log(result);
         toast({
-          title: "Sign Up successfuly",
+          title: "Sign Up successfuly, let's sign in",
           status: "success",
           position: "top",
           duration: 3000,

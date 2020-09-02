@@ -11,14 +11,34 @@ import {
 } from "@chakra-ui/core";
 import "./header-style.css";
 
+import { useHistory } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentUser } from "../../redux/user/user.action";
+
+import Cookie from "js-cookie";
+
 export const Header = (props) => {
   const [show, setShow] = React.useState(false);
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
+  const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const handleToggle = () => setShow(!show);
+
+  const handleLogout = () => {
+    const user = null;
+    dispatch(setCurrentUser(user));
+    Cookie.remove("token");
+    setShow(!show);
+    history.push("/");
+  };
+
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   return (
     <Flex
@@ -38,18 +58,33 @@ export const Header = (props) => {
       {...props}
     >
       <Flex align="center" mr={5}>
-        <Link to="/dashboard">
-          <Heading
-            className="menu-items"
-            cursor="pointer"
-            as="h1"
-            size="lg"
-            letterSpacing={"2px"}
-            fontSize={["xs", "sm", "md", "lg", "xl"]}
-          >
-            CREATIVE NODES
-          </Heading>
-        </Link>
+        {currentUser ? (
+          <Link to="/dashboard">
+            <Heading
+              className="menu-items"
+              cursor="pointer"
+              as="h1"
+              size="lg"
+              letterSpacing={"2px"}
+              fontSize={["xs", "sm", "md", "lg", "xl"]}
+            >
+              CREATIVE NODES
+            </Heading>
+          </Link>
+        ) : (
+          <Link to="/">
+            <Heading
+              className="menu-items"
+              cursor="pointer"
+              as="h1"
+              size="lg"
+              letterSpacing={"2px"}
+              fontSize={["xs", "sm", "md", "lg", "xl"]}
+            >
+              CREATIVE NODES
+            </Heading>
+          </Link>
+        )}
       </Flex>
 
       <Box
@@ -80,32 +115,54 @@ export const Header = (props) => {
         fontWeight="bold"
         cursor="pointer"
       >
-        <NavLink to="/episodes" activeClassName="active">
-          <MenuItems action={handleToggle}>Episodes</MenuItems>
-        </NavLink>
+        {currentUser ? (
+          <NavLink to="/episodes" activeClassName="active">
+            <MenuItems action={handleToggle}>Episodes</MenuItems>
+          </NavLink>
+        ) : null}
         <NavLink to="/discovery" activeClassName="active">
           <MenuItems action={handleToggle}>Discovery</MenuItems>
         </NavLink>
         <NavLink to="/contactus" activeClassName="active">
           <MenuItems action={handleToggle}>Contact Us</MenuItems>
         </NavLink>
-        <Link to="signin">
-          <Button
-            className="menu-items"
-            bg="transparent"
-            border="1px"
-            mt={{ base: 4, md: 0 }}
-            mr={6}
-            display="block"
-            textTransform="uppercase"
-            boxShadow="md"
-            fontWeight="bold"
-            fontSize={["xs", "sm", "md", "lg", "xl"]}
-            onClick={handleToggle}
-          >
-            Sign Out
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Link to="signin">
+            <Button
+              className="menu-items"
+              bg="transparent"
+              border="1px"
+              mt={{ base: 4, md: 0 }}
+              mr={6}
+              display="block"
+              textTransform="uppercase"
+              boxShadow="md"
+              fontWeight="bold"
+              fontSize={["xs", "sm", "md", "lg", "xl"]}
+              onClick={handleLogout}
+            >
+              Sign Out
+            </Button>
+          </Link>
+        ) : (
+          <Link to="signin">
+            <Button
+              className="menu-items"
+              bg="transparent"
+              border="1px"
+              mt={{ base: 4, md: 0 }}
+              mr={6}
+              display="block"
+              textTransform="uppercase"
+              boxShadow="md"
+              fontWeight="bold"
+              fontSize={["xs", "sm", "md", "lg", "xl"]}
+              onClick={handleToggle}
+            >
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Box display={{ xs: "none", md: "block" }}>
           <ThemeToggle />
         </Box>

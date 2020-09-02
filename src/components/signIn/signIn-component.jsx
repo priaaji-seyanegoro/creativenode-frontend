@@ -17,8 +17,14 @@ import {
   useToast,
   useColorMode,
 } from "@chakra-ui/core";
+
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../redux/user/user.action";
+
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+
+import Cookie from "js-cookie";
 import "./signIn-style.css";
 
 export const SignIn = () => {
@@ -28,20 +34,24 @@ export const SignIn = () => {
   const { colorMode } = useColorMode();
   const toast = useToast();
   const history = useHistory();
-
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
 
   const { register, errors, handleSubmit } = useForm();
 
+  const dispatch = useDispatch();
+
+  //SHOW VALUE INPUT PASSWORD
   function handleToggle(e) {
     e.preventDefault();
     setShowPass(!showPass);
   }
 
+  //SIGN IN ACTION
   const onSignIn = async (data, e) => {
     setSubmit(true);
     const { emailInput, passwordInput } = data;
+
     const response = await fetch("http://localhost:5000/api/user/auth/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -54,9 +64,11 @@ export const SignIn = () => {
 
     if (result.status) {
       setSubmit(false);
-      console.log(result);
+      dispatch(setCurrentUser(result));
+      Cookie.set("token", result.token);
+
       toast({
-        title: "Login successfuly",
+        title: "Sign In successfuly",
         status: "success",
         position: "top",
         duration: 3000,
@@ -67,8 +79,7 @@ export const SignIn = () => {
     } else {
       setSubmit(false);
       toast({
-        title: "Fail successfuly",
-        description: `${result.error}`,
+        title: "Sign In Fail",
         status: "error",
         position: "top",
         duration: 3000,

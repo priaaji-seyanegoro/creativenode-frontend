@@ -5,6 +5,7 @@ import { Item } from "../items/Item-component";
 import "./dashboardItems-style.css";
 
 export const DashboardItems = () => {
+  // const currentUser = useSelector((state) => state.user.currentUser);
   return (
     <>
       <Flex mt="20px" flexWrap="wrap" justifyContent="center">
@@ -18,7 +19,7 @@ export const DashboardItems = () => {
           <Item
             id="5ee962fb2bd83e27c0fb0581"
             imageSrc="https://d3t3ozftmdmh3i.cloudfront.net/production/podcast_uploaded_episode400/812386/812386-1588677350101-c4d4427d5d40f.jpg"
-            podcastName="Thirty Days Of Lunch Podcast"
+            podcastName="test"
             title="Lunch #12 : Managing Energy : The Secret To Productivity"
           />
         </Box>
