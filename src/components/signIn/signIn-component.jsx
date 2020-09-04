@@ -64,7 +64,7 @@ export const SignIn = () => {
 
     if (result.status) {
       setSubmit(false);
-      dispatch(setCurrentUser(result));
+      dispatch(setCurrentUser(true));
       Cookie.set("token", result.token);
 
       toast({
