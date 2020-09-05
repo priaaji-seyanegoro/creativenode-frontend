@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/core";
 import { useForm } from "react-hook-form";
 import Cookie from "js-cookie";
+import { useStoreActions } from "easy-peasy";
 
 export function DrawerUpload() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +33,8 @@ export function DrawerUpload() {
 
   const [submit, setSubmit] = useState(false);
   const { register, errors, handleSubmit } = useForm();
+
+  const addData = useStoreActions((actions) => actions.podcast.addPodcast);
 
   const validCover = (data) => {
     console.log(data.cover[0].type);
@@ -117,6 +120,7 @@ export function DrawerUpload() {
 
       if (result.status) {
         setSubmit(false);
+        addData(result.podcast);
         toast({
           title: "Uploading successfuly",
           status: "success",

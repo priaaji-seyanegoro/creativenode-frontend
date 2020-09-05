@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, Text, useColorMode, IconButton } from "@chakra-ui/core";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { DrawerUpload } from "../components/drawer-form-upload/drawer-component";
-import { dataPodcast } from "../components/table-episode/data-table";
+
 import { TablePodcast } from "../components/table-episode/table-component";
 
 export const Episodes = () => {
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
 
+  const fetchPodcast = useStoreActions(
+    (actions) => actions.podcast.fetchPodcast
+  );
+
+  const dataPodcast = useStoreState((state) => state.podcast.podcast);
+
+  useEffect(() => {
+    fetchPodcast();
+    // eslint-disable-next-line
+  }, []);
+
   const columns = React.useMemo(
     () => [
-      {
-        Header: "No",
-        accessor: "id",
-      },
       {
         Header: "title",
         accessor: "title",
@@ -54,7 +62,6 @@ export const Episodes = () => {
     []
   );
 
-  const data = React.useMemo(() => dataPodcast, []);
   return (
     <>
       <Flex
@@ -72,7 +79,7 @@ export const Episodes = () => {
           <DrawerUpload />
         </Flex>
 
-        <TablePodcast columns={columns} data={data} />
+        <TablePodcast columns={columns} data={dataPodcast} />
       </Flex>
     </>
   );

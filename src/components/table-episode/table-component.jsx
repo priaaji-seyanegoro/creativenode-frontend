@@ -10,6 +10,7 @@ import {
   Input,
   Box,
 } from "@chakra-ui/core";
+
 import "./table-style.css";
 
 export function TablePodcast({ columns, data }) {
@@ -17,6 +18,7 @@ export function TablePodcast({ columns, data }) {
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
+
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,

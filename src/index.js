@@ -2,14 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import { Provider } from "react-redux";
+
 import { BrowserRouter } from "react-router-dom";
-import store from "./redux/store";
+import { createStore, StoreProvider } from "easy-peasy";
+import { storeModel } from "./easy-peasy/model";
+
 import { ColorModeProvider, ThemeProvider, CSSReset } from "@chakra-ui/core";
 import * as serviceWorker from "./serviceWorker";
 
+const store = createStore(storeModel);
+
 ReactDOM.render(
-  <Provider store={store}>
+  <StoreProvider store={store}>
     <BrowserRouter>
       <ThemeProvider>
         <ColorModeProvider>
@@ -20,7 +24,7 @@ ReactDOM.render(
         </ColorModeProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </Provider>,
+  </StoreProvider>,
   document.getElementById("root")
 );
 

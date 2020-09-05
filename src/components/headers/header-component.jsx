@@ -13,8 +13,7 @@ import "./header-style.css";
 
 import { useHistory } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentUser } from "../../redux/user/user.action";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 import Cookie from "js-cookie";
 
@@ -24,7 +23,9 @@ export const Header = (props) => {
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "black", dark: "white" };
   const borderColor = { light: "black", dark: "white" };
-  const dispatch = useDispatch();
+
+  const currentUser = useStoreState((state) => state.user.currentUser);
+  const isAuth = useStoreActions((actions) => actions.user.setCurrenUser);
 
   const history = useHistory();
 
@@ -32,13 +33,11 @@ export const Header = (props) => {
 
   const handleLogout = () => {
     const user = null;
-    dispatch(setCurrentUser(user));
+    isAuth(user);
     Cookie.remove("token");
     setShow(!show);
     history.push("/");
   };
-
-  const currentUser = useSelector((state) => state.user.currentUser);
 
   return (
     <Flex

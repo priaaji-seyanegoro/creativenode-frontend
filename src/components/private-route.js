@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { useStoreState } from "easy-peasy";
 import Cookie from "js-cookie";
-import { useSelector } from "react-redux";
 
 export const PrivateRoute = ({ children, ...rest }) => {
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useStoreState((state) => state.user.currentUser);
   return (
     <Route
       {...rest}

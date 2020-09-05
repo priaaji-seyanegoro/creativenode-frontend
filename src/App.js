@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import Cookie from "js-cookie";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { Header } from "./components/headers/header-component";
 import { Home } from "./pages/home-page";
@@ -10,23 +12,16 @@ import { Dashboard } from "./pages/dashboard-page";
 import { Episodes } from "./pages/episodes-page";
 import { PodcastDetail } from "./pages/podcastDetail-page";
 import { NotMatch } from "./components/notmatch/notmatch-component";
-
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "./redux/user/user.action";
-
-import Cookie from "js-cookie";
-
 import { PrivateRoute } from "./components/private-route";
 
 function App() {
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const isAuth = useStoreActions((actions) => actions.user.setCurrenUser);
+  const currentUser = useStoreState((state) => state.user.currentUser);
 
   const readCookie = () => {
     const user = Cookie.get("token");
     if (user) {
-      dispatch(setCurrentUser(true));
+      isAuth(true);
     }
   };
 

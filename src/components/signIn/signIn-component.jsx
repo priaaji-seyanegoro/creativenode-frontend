@@ -18,11 +18,10 @@ import {
   useColorMode,
 } from "@chakra-ui/core";
 
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../../redux/user/user.action";
-
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+
+import { useStoreActions } from "easy-peasy";
 
 import Cookie from "js-cookie";
 import "./signIn-style.css";
@@ -39,7 +38,7 @@ export const SignIn = () => {
 
   const { register, errors, handleSubmit } = useForm();
 
-  const dispatch = useDispatch();
+  const isAuth = useStoreActions((actions) => actions.user.setCurrenUser);
 
   //SHOW VALUE INPUT PASSWORD
   function handleToggle(e) {
@@ -64,7 +63,7 @@ export const SignIn = () => {
 
     if (result.status) {
       setSubmit(false);
-      dispatch(setCurrentUser(true));
+      isAuth(true);
       Cookie.set("token", result.token);
 
       toast({
