@@ -51,7 +51,7 @@ export function DrawerUpload() {
         isClosable: true,
       });
       return false;
-    } else if (data.cover[0].size > 100000) {
+    } else if (data.cover[0].size > 1000000) {
       console.log("cover", data.cover[0].size);
       toast({
         title: "Warning file size",
@@ -129,6 +129,7 @@ export function DrawerUpload() {
           isClosable: true,
         });
         e.target.reset();
+        onClose();
         console.log(result);
       } else {
         setSubmit(false);
@@ -185,6 +186,7 @@ export function DrawerUpload() {
                     placeholder="Please enter title podcast"
                     ref={register({
                       required: true,
+                      minLength: 6,
                     })}
                     autoComplete="off"
                     borderColor={borderColor[colorMode]}
@@ -192,6 +194,8 @@ export function DrawerUpload() {
                   <FormErrorMessage>
                     {errors.titleInput?.type === "required" &&
                       "Title Podcast required"}
+                    {errors.titleInput?.type === "minLength" &&
+                      "Title Podcast min 6 character"}
                   </FormErrorMessage>
                 </FormControl>
 
@@ -235,6 +239,7 @@ export function DrawerUpload() {
                     name="descInput"
                     ref={register({
                       required: true,
+                      minLength: 6,
                     })}
                     autoComplete="off"
                     borderColor={borderColor[colorMode]}
@@ -242,6 +247,8 @@ export function DrawerUpload() {
                   <FormErrorMessage>
                     {errors.descInput?.type === "required" &&
                       "Description Podcast required"}
+                    {errors.descInput?.type === "minLength" &&
+                      "Description Podcast min 6 charachter"}
                   </FormErrorMessage>
                 </FormControl>
               </Stack>

@@ -34,6 +34,10 @@ const podcastModel = {
   addPodcast: action((state, podcast) => {
     state.podcast = [...state.podcast, podcast];
   }),
+
+  removePodcast: action((state, id) => {
+    state.podcast = state.podcast.filter((podcast) => podcast._id !== id);
+  }),
 };
 
 export const storeModel = {
