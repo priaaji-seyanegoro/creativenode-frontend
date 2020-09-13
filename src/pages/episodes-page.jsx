@@ -14,21 +14,44 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  FormErrorMessage,
 } from "@chakra-ui/core";
 
 import Cookie from "js-cookie";
+import { useForm } from "react-hook-form";
 
 export const Episodes = () => {
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
 
-  const [isOpen, setIsOpen] = React.useState();
   const [id, setId] = React.useState();
-  const onClose = () => setIsOpen(false);
+  const [title, setTitle] = React.useState("");
+  const [desc, setDesc] = React.useState("");
+
+  const [isOpened, setIsOpened] = React.useState();
+  const onClosed = () => setIsOpened(false);
   const cancelRef = React.useRef();
 
-  const fetchPodcast = useStoreActions(
-    (actions) => actions.podcast.fetchPodcast
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = React.useRef();
+  const finalRef = React.useRef();
+
+  const { register, errors, handleSubmit } = useForm();
+
+  const fetchYourPodcast = useStoreActions(
+    (actions) => actions.podcast.fetchYourPodcast
   );
 
   const removePodcast = useStoreActions(
@@ -38,7 +61,7 @@ export const Episodes = () => {
   const dataPodcast = useStoreState((state) => state.podcast.podcast);
 
   useEffect(() => {
-    fetchPodcast();
+    fetchYourPodcast();
     // eslint-disable-next-line
   }, []);
 
@@ -53,6 +76,44 @@ export const Episodes = () => {
 
     if (result.status) {
       removePodcast(id);
+      onClosed();
+    }
+  };
+
+  const getPodcastById = async (id) => {
+    const response = await fetch(`http://localhost:5000/api/podcast/${id}`, {
+      method: "get",
+      headers: {
+        "auth-token": Cookie.get("token"),
+      },
+    });
+    const result = await response.json();
+
+    setId(result.podcast._id);
+    setTitle(result.podcast.title);
+    setDesc(result.podcast.description);
+    onOpen();
+  };
+
+  const onUpdatePodcast = async (data) => {
+    const { titleInput, descInput, podcastId } = data;
+    const updated = await fetch(
+      `http://localhost:5000/api/podcast/${podcastId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": Cookie.get("token"),
+        },
+        body: JSON.stringify({
+          title: titleInput,
+          description: descInput,
+        }),
+      }
+    );
+    const result = await updated.json();
+    if (result.status) {
+      fetchYourPodcast();
       onClose();
     }
   };
@@ -76,7 +137,7 @@ export const Episodes = () => {
                   aria-label="Delete-Podcast"
                   icon="delete"
                   onClick={() => {
-                    setIsOpen(true);
+                    setIsOpened(true);
                     setId(props.row.original._id);
                   }}
                 />
@@ -92,6 +153,9 @@ export const Episodes = () => {
                   variant="outline"
                   aria-label="Update-Podcast"
                   icon="edit"
+                  onClick={() => {
+                    getPodcastById(props.row.original._id);
+                  }}
                 />
               );
             },
@@ -121,9 +185,9 @@ export const Episodes = () => {
         </Flex>
 
         <AlertDialog
-          isOpen={isOpen}
+          isOpen={isOpened}
           leastDestructiveRef={cancelRef}
-          onClose={onClose}
+          onClose={onClosed}
         >
           <AlertDialogOverlay />
           <AlertDialogContent>
@@ -136,7 +200,7 @@ export const Episodes = () => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button ref={cancelRef} onClick={onClosed}>
                 Cancel
               </Button>
               <Button variantColor="red" onClick={onDelete} ml={3}>
@@ -145,6 +209,77 @@ export const Episodes = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <ModalOverlay />
+          <form onSubmit={handleSubmit(onUpdatePodcast)}>
+            <ModalContent>
+              <ModalHeader>Update your podcast</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <Input
+                    ref={register}
+                    name="podcastId"
+                    type="hidden"
+                    defaultValue={id}
+                  />
+                </FormControl>
+
+                <FormControl isInvalid={errors.titleInput}>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    name="titleInput"
+                    placeholder="Please enter title podcast"
+                    ref={register({
+                      required: true,
+                      minLength: 6,
+                    })}
+                    autoComplete="off"
+                    defaultValue={title}
+                  />
+                  <FormErrorMessage>
+                    {errors.titleInput?.type === "required" &&
+                      "Title Podcast required"}
+                    {errors.titleInput?.type === "minLength" &&
+                      "Title Podcast min 6 character"}
+                  </FormErrorMessage>
+                </FormControl>
+
+                <FormControl isInvalid={errors.descInput}>
+                  <FormLabel htmlFor="desc">Description</FormLabel>
+                  <Textarea
+                    name="descInput"
+                    ref={register({
+                      required: true,
+                      minLength: 6,
+                    })}
+                    autoComplete="off"
+                    defaultValue={desc}
+                  />
+                  <FormErrorMessage>
+                    {errors.descInput?.type === "required" &&
+                      "Description Podcast required"}
+                    {errors.descInput?.type === "minLength" &&
+                      "Description Podcast min 6 charachter"}
+                  </FormErrorMessage>
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variantColor="blue" mr={3} type="submit">
+                  Save
+                </Button>
+                <Button onClick={onClose}>Cancel</Button>
+              </ModalFooter>
+            </ModalContent>
+          </form>
+        </Modal>
 
         <TablePodcast columns={columns} data={dataPodcast} />
       </Flex>

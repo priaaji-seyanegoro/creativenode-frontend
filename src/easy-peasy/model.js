@@ -16,6 +16,17 @@ const podcastModel = {
   fetchPodcast: thunk(async (actions) => {
     const res = await fetch("http://localhost:5000/api/podcast/", {
       method: "get",
+    });
+
+    const dataPodcast = await res.json();
+
+    actions.setPodcast(dataPodcast.podcast);
+    console.log(dataPodcast.podcast);
+  }),
+
+  fetchYourPodcast: thunk(async (actions) => {
+    const res = await fetch("http://localhost:5000/api/podcast/yourPodcast", {
+      method: "get",
       headers: {
         "auth-token": Cookie.get("token"),
       },

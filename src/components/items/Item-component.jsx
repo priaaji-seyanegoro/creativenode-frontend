@@ -3,12 +3,12 @@ import { Text, Box, Image } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 import "./Item-style.css";
 
-export const Item = ({ imageSrc, podcastName, title, id }) => (
+export const Item = ({ imageSrc, podcastName, title, id, keyId }) => (
   <>
-    <Link to={`/podcast/show/${id}`}>
+    <Link to={`/podcast/show/${id}`} key={keyId}>
       <Box textAlign="center" mb="20px" className="trending-items">
         <Image
-          src={imageSrc}
+          src={`http://localhost:5000/${imageSrc}`}
           size="200px"
           objectFit="cover"
           rounded="20px"
