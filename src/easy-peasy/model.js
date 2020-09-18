@@ -12,6 +12,8 @@ const userModel = {
 
 const podcastModel = {
   podcast: [],
+  currentPodcast: [],
+  isLoading: true,
 
   fetchPodcast: thunk(async (actions) => {
     const res = await fetch("http://localhost:5000/api/podcast/", {
@@ -20,8 +22,11 @@ const podcastModel = {
 
     const dataPodcast = await res.json();
 
-    actions.setPodcast(dataPodcast.podcast);
-    console.log(dataPodcast.podcast);
+    if (dataPodcast) {
+      actions.setPodcast(dataPodcast.podcast);
+      actions.setIsLoading(false);
+      console.log(dataPodcast.podcast);
+    }
   }),
 
   fetchYourPodcast: thunk(async (actions) => {
@@ -36,6 +41,31 @@ const podcastModel = {
 
     actions.setPodcast(dataPodcast.podcast);
     console.log(dataPodcast.podcast);
+  }),
+
+  fetchPodcastById: thunk(async (actions, id) => {
+    actions.setIsLoading(true);
+    const response = await fetch(`http://localhost:5000/api/podcast/${id}`, {
+      method: "get",
+      headers: {
+        "auth-token": Cookie.get("token"),
+      },
+    });
+
+    const dataPodcast = await response.json();
+    if (dataPodcast) {
+      actions.setCurrentPodcast(dataPodcast);
+      actions.setIsLoading(false);
+      console.log(dataPodcast);
+    }
+  }),
+
+  setIsLoading: action((state, loading) => {
+    state.isLoading = loading;
+  }),
+
+  setCurrentPodcast: action((state, podcast) => {
+    state.currentPodcast = podcast;
   }),
 
   setPodcast: action((state, podcast) => {

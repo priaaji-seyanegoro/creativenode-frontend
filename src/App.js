@@ -31,19 +31,10 @@ function App() {
     <>
       <Header />
       <Switch>
-        <Route
-          exact
-          path="/"
-          render={() =>
-            Cookie.get("token") && currentUser ? (
-              <Redirect to="/dashboard" />
-            ) : (
-              <Home />
-            )
-          }
-        />
+        <Route exact path="/" component={Home} />
         <Route path="/discovery" component={Discovery} />
         <Route path="/contactus" component={ContactUs} />
+
         <Route
           path="/signin"
           render={() =>
@@ -61,11 +52,9 @@ function App() {
           <Episodes />
         </PrivateRoute>
 
-        <Route
-          path="/podcast/show/:podcastId"
-          exact
-          component={PodcastDetail}
-        />
+        <PrivateRoute exact path="/podcast/show/:podcastId">
+          <PodcastDetail />
+        </PrivateRoute>
 
         <Route path="*" component={NotMatch} />
       </Switch>

@@ -89,9 +89,9 @@ export const Episodes = () => {
     });
     const result = await response.json();
 
-    setId(result.podcast._id);
-    setTitle(result.podcast.title);
-    setDesc(result.podcast.description);
+    setId(result._id);
+    setTitle(result.title);
+    setDesc(result.description);
     onOpen();
   };
 
