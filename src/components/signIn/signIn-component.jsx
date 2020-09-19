@@ -50,32 +50,45 @@ export const SignIn = () => {
   const onSignIn = async (data, e) => {
     setSubmit(true);
     const { emailInput, passwordInput } = data;
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/user/auth/login",
+        {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: emailInput,
+            password: passwordInput,
+          }),
+        }
+      );
+      const result = await response.json();
 
-    const response = await fetch("http://localhost:5000/api/user/auth/login", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: emailInput,
-        password: passwordInput,
-      }),
-    });
-    const result = await response.json();
+      if (result.status) {
+        setSubmit(false);
+        isAuth(true);
+        Cookie.set("token", result.token);
 
-    if (result.status) {
-      setSubmit(false);
-      isAuth(true);
-      Cookie.set("token", result.token);
-
-      toast({
-        title: "Sign In successfuly",
-        status: "success",
-        position: "top",
-        duration: 3000,
-        isClosable: true,
-      });
-      e.target.reset();
-      history.push("/dashboard");
-    } else {
+        toast({
+          title: "Sign In successfuly",
+          status: "success",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.reset();
+        history.push("/dashboard");
+      } else {
+        setSubmit(false);
+        toast({
+          title: "Sign In Fail",
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch {
       setSubmit(false);
       toast({
         title: "Sign In Fail",

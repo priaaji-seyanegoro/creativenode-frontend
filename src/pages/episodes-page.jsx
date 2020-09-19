@@ -27,6 +27,7 @@ import {
   Input,
   Textarea,
   FormErrorMessage,
+  Skeleton,
 } from "@chakra-ui/core";
 
 import Cookie from "js-cookie";
@@ -59,6 +60,7 @@ export const Episodes = () => {
   );
 
   const dataPodcast = useStoreState((state) => state.podcast.podcast);
+  const isLoading = useStoreState((state) => state.podcast.isLoading);
 
   useEffect(() => {
     fetchYourPodcast();
@@ -281,7 +283,26 @@ export const Episodes = () => {
           </form>
         </Modal>
 
-        <TablePodcast columns={columns} data={dataPodcast} />
+        {isLoading ? (
+          <div>
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+            <Skeleton height="20px" my="10px" mx="30px" />
+          </div>
+        ) : (
+          <TablePodcast
+            columns={columns}
+            data={dataPodcast}
+            noDataText={"Loading..."}
+            loading={isLoading}
+          />
+        )}
       </Flex>
     </>
   );

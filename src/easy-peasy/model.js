@@ -16,6 +16,8 @@ const podcastModel = {
   isLoading: true,
 
   fetchPodcast: thunk(async (actions) => {
+    actions.setIsLoading(true);
+    actions.setPodcast([]);
     const res = await fetch("http://localhost:5000/api/podcast/", {
       method: "get",
     });
@@ -30,6 +32,8 @@ const podcastModel = {
   }),
 
   fetchYourPodcast: thunk(async (actions) => {
+    actions.setIsLoading(true);
+    actions.setPodcast([]);
     const res = await fetch("http://localhost:5000/api/podcast/yourPodcast", {
       method: "get",
       headers: {
@@ -39,8 +43,11 @@ const podcastModel = {
 
     const dataPodcast = await res.json();
 
-    actions.setPodcast(dataPodcast.podcast);
-    console.log(dataPodcast.podcast);
+    if (dataPodcast) {
+      actions.setPodcast(dataPodcast.podcast);
+      actions.setIsLoading(false);
+      console.log(dataPodcast.podcast);
+    }
   }),
 
   fetchPodcastById: thunk(async (actions, id) => {

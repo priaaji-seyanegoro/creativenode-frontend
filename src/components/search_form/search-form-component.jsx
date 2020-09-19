@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   IconButton,
@@ -10,12 +10,42 @@ import {
   Button,
   InputGroup,
   useColorMode,
+  FormErrorMessage,
 } from "@chakra-ui/core";
-
+import { useForm } from "react-hook-form";
+import { useStoreActions } from "easy-peasy";
 import "./search-form-style.css";
 
 export const SearchFrom = () => {
   const { colorMode } = useColorMode();
+  const { register, errors, handleSubmit } = useForm();
+  const [submit, setSubmit] = useState(false);
+
+  const setPodcast = useStoreActions((actions) => actions.podcast.setPodcast);
+
+  const onSearch = async (data, e) => {
+    const { searchInput } = data;
+    setPodcast([]);
+    setSubmit(true);
+    try {
+      const search = await fetch(
+        `http://localhost:5000/api/podcast/search?q=${searchInput}`,
+        {
+          method: "get",
+        }
+      );
+
+      const result = await search.json();
+
+      if (result) {
+        console.log(result.podcast);
+        setPodcast(result.podcast);
+        setSubmit(false);
+      }
+    } catch {
+      console.log("fail");
+    }
+  };
 
   const borderColor = { light: "black", dark: "white" };
   return (
@@ -30,9 +60,9 @@ export const SearchFrom = () => {
         mt="100px"
       >
         <Flex direction="row" className="search-section">
-          <form>
+          <form onSubmit={handleSubmit(onSearch)}>
             <Stack spacing={4}>
-              <FormControl isRequired>
+              <FormControl isInvalid={errors.searchInput}>
                 <InputGroup>
                   <Input
                     id="pass-signin"
@@ -42,11 +72,35 @@ export const SearchFrom = () => {
                     borderColor={borderColor[colorMode]}
                     w={["250px", "sm", "md", "lg", "xl"]}
                     mb="20px"
+                    autoComplete="off"
+                    name="searchInput"
+                    ref={register({
+                      required: true,
+                    })}
                   />
                   <InputRightElement>
-                    <IconButton icon="search" variant="ghost" size="sm" />
+                    {!submit ? (
+                      <IconButton
+                        type="submit"
+                        icon="search"
+                        variant="ghost"
+                        size="sm"
+                      />
+                    ) : (
+                      <IconButton
+                        isLoading
+                        type="submit"
+                        icon="search"
+                        variant="ghost"
+                        size="sm"
+                      />
+                    )}
                   </InputRightElement>
                 </InputGroup>
+                <FormErrorMessage alignItems="center">
+                  {errors.searchInput?.type === "required" &&
+                    "Search Input Cannot be null"}
+                </FormErrorMessage>
               </FormControl>
             </Stack>
           </form>
