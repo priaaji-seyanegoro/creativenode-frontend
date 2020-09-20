@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import Moment from "moment";
+import Cookie from "js-cookie";
 import {
   Flex,
   Button,
@@ -12,6 +13,7 @@ import {
   Tooltip,
   Collapse,
   Badge,
+  ButtonGroup,
 } from "@chakra-ui/core";
 
 import { PodcastDetailSkelton } from "../components/skelton/podcastDetailSkelton";
@@ -21,6 +23,7 @@ import "./podcastDetail-style.css";
 export const PodcastDetail = () => {
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
+  const [submit, setSubmit] = React.useState(false);
 
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
@@ -31,6 +34,11 @@ export const PodcastDetail = () => {
     (actions) => actions.podcast.fetchPodcastById
   );
 
+  const setLike = useStoreActions((actions) => actions.podcast.setLikePodcast);
+  const setUnLike = useStoreActions(
+    (actions) => actions.podcast.setUnLikePodcast
+  );
+
   useEffect(() => {
     fetchPodcastById(podcastId);
     // eslint-disable-next-line
@@ -38,6 +46,47 @@ export const PodcastDetail = () => {
 
   const dataPodcast = useStoreState((state) => state.podcast.currentPodcast);
   const isLoading = useStoreState((state) => state.podcast.isLoading);
+
+  const onLike = async (id) => {
+    setSubmit(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/likes", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": Cookie.get("token"),
+        },
+        body: JSON.stringify({
+          kontenId: id,
+        }),
+      });
+      if (response.status) {
+        setLike();
+        setSubmit(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onUnlike = async (id) => {
+    setSubmit(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/likes/${id}`, {
+        method: "put",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      });
+
+      if (response.status) {
+        setUnLike();
+        setSubmit(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   if (isLoading) {
     return <PodcastDetailSkelton />;
@@ -57,11 +106,70 @@ export const PodcastDetail = () => {
                 fallbackSrc="https://via.placeholder.com/150"
                 mb="20px"
               />
+              <Flex align="center" justifyContent="space-around" mb="20px">
+                <ButtonGroup spacing={4}>
+                  <Button
+                    leftIcon="add"
+                    className="menu-items"
+                    bg="transparent"
+                    border="1px"
+                    textTransform="uppercase"
+                    boxShadow="md"
+                    fontWeight="bold"
+                  >
+                    Follow
+                  </Button>
+                  {dataPodcast.hasLike ? (
+                    !submit ? (
+                      <Button
+                        onClick={() => {
+                          onUnlike(dataPodcast._id);
+                        }}
+                        leftIcon="close"
+                        variantColor="red"
+                        variant="solid"
+                      >
+                        Unlike
+                      </Button>
+                    ) : (
+                      <Button
+                        isLoading
+                        leftIcon="close"
+                        variantColor="red"
+                        variant="solid"
+                      >
+                        Unlike
+                      </Button>
+                    )
+                  ) : !submit ? (
+                    <Button
+                      onClick={() => {
+                        onLike(dataPodcast._id);
+                      }}
+                      leftIcon="star"
+                      variantColor="blue"
+                      variant="solid"
+                    >
+                      Like
+                    </Button>
+                  ) : (
+                    <Button
+                      isLoading
+                      leftIcon="star"
+                      variantColor="blue"
+                      variant="solid"
+                    >
+                      Like
+                    </Button>
+                  )}
+                </ButtonGroup>
+              </Flex>
               <Flex align="center" justifyContent="center" mb="20px">
                 <audio
                   controlsList="nodownload"
                   src={`http://localhost:5000/${dataPodcast.audio}`}
                   controls
+                  color={color[colorMode]}
                 >
                   <p>
                     If your browser doesn't support the 'audio' element, it will
@@ -70,6 +178,7 @@ export const PodcastDetail = () => {
                   </p>
                 </audio>
               </Flex>
+
               <Flex align="center" justifyContent="center" mb="20px">
                 <Badge fontSize="xl">{`${dataPodcast.likes} Likes`}</Badge>
                 <Tooltip hasArrow label="Di Upload" placement="top">
@@ -77,21 +186,6 @@ export const PodcastDetail = () => {
                     {Moment(dataPodcast.createdAt).format("DD MMMM YYYY")}
                   </Badge>
                 </Tooltip>
-              </Flex>
-              <Flex align="center" justifyContent="space-around" mb="20px">
-                <Button
-                  className="menu-items"
-                  id="play-button"
-                  bg="transparent"
-                  border="1px"
-                  width="200px"
-                  textTransform="uppercase"
-                  boxShadow="md"
-                  fontWeight="bold"
-                  fontSize={["xs", "sm", "md", "lg", "xl"]}
-                >
-                  Liked Podcast
-                </Button>
               </Flex>
             </Flex>
             <Flex flexDirection="column" ml="3%" className="section-2">

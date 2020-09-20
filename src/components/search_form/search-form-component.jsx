@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FormControl,
   IconButton,
@@ -67,7 +68,7 @@ export const SearchFrom = () => {
                   <Input
                     id="pass-signin"
                     type="text"
-                    placeholder="Search for podcasts"
+                    placeholder="Search Title Podcast"
                     border="1px"
                     borderColor={borderColor[colorMode]}
                     w={["250px", "sm", "md", "lg", "xl"]}
@@ -112,9 +113,11 @@ export const SearchFrom = () => {
           >
             or
           </Text>
-          <Button variantColor="purple" ml="20px" className="button-upload">
-            Upload your own
-          </Button>
+          <Link to="episodes">
+            <Button variantColor="purple" ml="20px" className="button-upload">
+              Upload your own
+            </Button>
+          </Link>
         </Flex>
       </Flex>
 

@@ -26,6 +26,7 @@ export const Header = (props) => {
 
   const currentUser = useStoreState((state) => state.user.currentUser);
   const isAuth = useStoreActions((actions) => actions.user.setCurrenUser);
+  const isLoading = useStoreActions((actions) => actions.podcast.setIsLoading);
 
   const history = useHistory();
 
@@ -58,7 +59,9 @@ export const Header = (props) => {
     >
       <Flex align="center" mr={5}>
         {currentUser ? (
-          <Link to="/dashboard">
+          <Link to="/dashboard" onClick={() => {
+            isLoading(true);
+          }}>
             <Heading
               className="menu-items"
               cursor="pointer"
@@ -115,11 +118,15 @@ export const Header = (props) => {
         cursor="pointer"
       >
         {currentUser ? (
-          <NavLink to="/episodes" activeClassName="active">
+          <NavLink to="/episodes" activeClassName="active" onClick={() => {
+            isLoading(true);
+          }}>
             <MenuItems action={handleToggle}>Episodes</MenuItems>
           </NavLink>
         ) : null}
-        <NavLink to="/discovery" activeClassName="active">
+        <NavLink to="/discovery" activeClassName="active" onClick={() => {
+          isLoading(true);
+        }}>
           <MenuItems action={handleToggle}>Discovery</MenuItems>
         </NavLink>
         <NavLink to="/contactus" activeClassName="active">

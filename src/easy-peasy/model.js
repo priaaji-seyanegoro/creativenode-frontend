@@ -75,6 +75,16 @@ const podcastModel = {
     state.currentPodcast = podcast;
   }),
 
+  setLikePodcast: action((state, like) => {
+    state.currentPodcast.likes = state.currentPodcast.likes + 1;
+    state.currentPodcast.hasLike = true;
+  }),
+
+  setUnLikePodcast: action((state, like) => {
+    state.currentPodcast.likes = state.currentPodcast.likes - 1;
+    state.currentPodcast.hasLike = false;
+  }),
+
   setPodcast: action((state, podcast) => {
     state.podcast = podcast;
   }),
