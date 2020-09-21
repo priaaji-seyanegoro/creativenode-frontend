@@ -20,6 +20,9 @@ const podcastModel = {
     actions.setPodcast([]);
     const res = await fetch("http://localhost:5000/api/podcast/", {
       method: "get",
+      headers: {
+        "auth-token": Cookie.get("token"),
+      },
     });
 
     const dataPodcast = await res.json();
@@ -27,7 +30,21 @@ const podcastModel = {
     if (dataPodcast) {
       actions.setPodcast(dataPodcast.podcast);
       actions.setIsLoading(false);
-      console.log(dataPodcast.podcast);
+    }
+  }),
+
+  fetchTrendingPodcast: thunk(async (actions) => {
+    actions.setIsLoading(true);
+    actions.setPodcast([]);
+    const res = await fetch("http://localhost:5000/api/podcast/trending", {
+      method: "get",
+    });
+
+    const dataPodcast = await res.json();
+
+    if (dataPodcast) {
+      actions.setPodcast(dataPodcast.podcast);
+      actions.setIsLoading(false);
     }
   }),
 
@@ -46,7 +63,6 @@ const podcastModel = {
     if (dataPodcast) {
       actions.setPodcast(dataPodcast.podcast);
       actions.setIsLoading(false);
-      console.log(dataPodcast.podcast);
     }
   }),
 
@@ -75,12 +91,20 @@ const podcastModel = {
     state.currentPodcast = podcast;
   }),
 
-  setLikePodcast: action((state, like) => {
+  setFollowPodcast: action((state) => {
+    state.currentPodcast.hasFollow = true;
+  }),
+
+  setUnFollowPodcast: action((state) => {
+    state.currentPodcast.hasFollow = false;
+  }),
+
+  setLikePodcast: action((state) => {
     state.currentPodcast.likes = state.currentPodcast.likes + 1;
     state.currentPodcast.hasLike = true;
   }),
 
-  setUnLikePodcast: action((state, like) => {
+  setUnLikePodcast: action((state) => {
     state.currentPodcast.likes = state.currentPodcast.likes - 1;
     state.currentPodcast.hasLike = false;
   }),

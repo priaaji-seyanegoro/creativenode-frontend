@@ -37,7 +37,6 @@ export function DrawerUpload() {
   const addData = useStoreActions((actions) => actions.podcast.addPodcast);
 
   const validCover = (data) => {
-    console.log(data.cover[0].type);
     if (
       data.cover[0].type !== "image/jpeg" &&
       data.cover[0].type !== "image/png"
@@ -52,7 +51,6 @@ export function DrawerUpload() {
       });
       return false;
     } else if (data.cover[0].size > 1000000) {
-      console.log("cover", data.cover[0].size);
       toast({
         title: "Warning file size",
         description:
@@ -68,7 +66,6 @@ export function DrawerUpload() {
   };
 
   const validAudio = (data) => {
-    console.log("audio", data.audio[0].type);
     if (data.audio[0].type !== "audio/mpeg") {
       toast({
         title: "Warning file type",
@@ -80,7 +77,6 @@ export function DrawerUpload() {
       });
       return false;
     } else if (data.audio[0].size > 60000000) {
-      console.log("audio", data.audio[0].size);
       toast({
         title: "Warning file size",
         description:
@@ -130,7 +126,6 @@ export function DrawerUpload() {
         });
         e.target.reset();
         onClose();
-        console.log(result);
       } else {
         setSubmit(false);
         toast({

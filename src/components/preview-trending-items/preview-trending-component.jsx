@@ -5,15 +5,15 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { DashboardSkelton } from "../skelton/dashboardSkelton";
 
 export const PreviewTrendingItems = () => {
-  const fetchPodcast = useStoreActions(
-    (actions) => actions.podcast.fetchPodcast
+  const fetchTrendingPodcast = useStoreActions(
+    (actions) => actions.podcast.fetchTrendingPodcast
   );
 
   const dataPodcasts = useStoreState((state) => state.podcast.podcast);
   const isLoading = useStoreState((state) => state.podcast.isLoading);
 
   useEffect(() => {
-    fetchPodcast();
+    fetchTrendingPodcast();
     // eslint-disable-next-line
   }, []);
 

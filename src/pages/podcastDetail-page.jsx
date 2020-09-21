@@ -24,6 +24,7 @@ export const PodcastDetail = () => {
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
   const [submit, setSubmit] = React.useState(false);
+  const [submitFollow, setSubmitFollow] = React.useState(false);
 
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
@@ -32,6 +33,14 @@ export const PodcastDetail = () => {
 
   const fetchPodcastById = useStoreActions(
     (actions) => actions.podcast.fetchPodcastById
+  );
+
+  const setFollow = useStoreActions(
+    (actions) => actions.podcast.setFollowPodcast
+  );
+
+  const setUnFollow = useStoreActions(
+    (actions) => actions.podcast.setUnFollowPodcast
   );
 
   const setLike = useStoreActions((actions) => actions.podcast.setLikePodcast);
@@ -63,6 +72,46 @@ export const PodcastDetail = () => {
       if (response.status) {
         setLike();
         setSubmit(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onFollow = async (id) => {
+    setSubmitFollow(true);
+    try {
+      const response = await fetch("http://localhost:5000/api/follow", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": Cookie.get("token"),
+        },
+        body: JSON.stringify({
+          followedId: id,
+        }),
+      });
+      if (response.status) {
+        setFollow();
+        setSubmitFollow(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onUnFollow = async (id) => {
+    setSubmitFollow(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/follow/${id}`, {
+        method: "put",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      });
+      if (response.status) {
+        setUnFollow();
+        setSubmitFollow(false);
       }
     } catch (err) {
       console.log(err);
@@ -108,17 +157,72 @@ export const PodcastDetail = () => {
               />
               <Flex align="center" justifyContent="space-around" mb="20px">
                 <ButtonGroup spacing={4}>
-                  <Button
-                    leftIcon="add"
-                    className="menu-items"
-                    bg="transparent"
-                    border="1px"
-                    textTransform="uppercase"
-                    boxShadow="md"
-                    fontWeight="bold"
-                  >
-                    Follow
-                  </Button>
+                  {dataPodcast.hasFollow ? (
+                    !submitFollow ? (
+                      <Button
+                        leftIcon="check"
+                        className="menu-items"
+                        bg="transparent"
+                        border="1px"
+                        textTransform="uppercase"
+                        boxShadow="md"
+                        fontWeight="bold"
+                        onClick={() => {
+                          onUnFollow(dataPodcast.createdBy._id);
+                        }}
+                      >
+                        Followed
+                      </Button>
+                    ) : (
+                      <Button
+                        isLoading
+                        leftIcon="check"
+                        className="menu-items"
+                        bg="transparent"
+                        border="1px"
+                        textTransform="uppercase"
+                        boxShadow="md"
+                        fontWeight="bold"
+                        onClick={() => {
+                          onUnFollow(dataPodcast.createdBy._id);
+                        }}
+                      >
+                        Followed
+                      </Button>
+                    )
+                  ) : !submitFollow ? (
+                    <Button
+                      leftIcon="add"
+                      className="menu-items"
+                      bg="transparent"
+                      border="1px"
+                      textTransform="uppercase"
+                      boxShadow="md"
+                      fontWeight="bold"
+                      onClick={() => {
+                        onFollow(dataPodcast.createdBy._id);
+                      }}
+                    >
+                      Follow
+                    </Button>
+                  ) : (
+                    <Button
+                      isLoading
+                      leftIcon="add"
+                      className="menu-items"
+                      bg="transparent"
+                      border="1px"
+                      textTransform="uppercase"
+                      boxShadow="md"
+                      fontWeight="bold"
+                      onClick={() => {
+                        onFollow(dataPodcast.createdBy._id);
+                      }}
+                    >
+                      Follow
+                    </Button>
+                  )}
+
                   {dataPodcast.hasLike ? (
                     !submit ? (
                       <Button

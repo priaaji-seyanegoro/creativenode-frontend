@@ -38,7 +38,6 @@ export const SignUp = () => {
   }
 
   const onSignUp = async (data, e) => {
-    console.log(data);
     setSubmit(true);
     if (data.password !== data.confirmPassword) {
       toast({
@@ -66,7 +65,7 @@ export const SignUp = () => {
       const result = await response.json();
       if (result.status) {
         setSubmit(false);
-        console.log(result);
+
         toast({
           title: "Sign Up successfuly, let's sign in",
           status: "success",

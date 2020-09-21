@@ -39,7 +39,6 @@ export const SearchFrom = () => {
       const result = await search.json();
 
       if (result) {
-        console.log(result.podcast);
         setPodcast(result.podcast);
         setSubmit(false);
       }
