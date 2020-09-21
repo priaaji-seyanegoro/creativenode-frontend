@@ -59,16 +59,19 @@ export const PodcastDetail = () => {
   const onLike = async (id) => {
     setSubmit(true);
     try {
-      const response = await fetch("http://localhost:5000/api/likes", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": Cookie.get("token"),
-        },
-        body: JSON.stringify({
-          kontenId: id,
-        }),
-      });
+      const response = await fetch(
+        "https://cryptic-thicket-69508.herokuapp.com/api/likes",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": Cookie.get("token"),
+          },
+          body: JSON.stringify({
+            kontenId: id,
+          }),
+        }
+      );
       if (response.status) {
         setLike();
         setSubmit(false);
@@ -81,16 +84,19 @@ export const PodcastDetail = () => {
   const onFollow = async (id) => {
     setSubmitFollow(true);
     try {
-      const response = await fetch("http://localhost:5000/api/follow", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": Cookie.get("token"),
-        },
-        body: JSON.stringify({
-          followedId: id,
-        }),
-      });
+      const response = await fetch(
+        "https://cryptic-thicket-69508.herokuapp.com/api/follow",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": Cookie.get("token"),
+          },
+          body: JSON.stringify({
+            followedId: id,
+          }),
+        }
+      );
       if (response.status) {
         setFollow();
         setSubmitFollow(false);
@@ -103,12 +109,15 @@ export const PodcastDetail = () => {
   const onUnFollow = async (id) => {
     setSubmitFollow(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/follow/${id}`, {
-        method: "put",
-        headers: {
-          "auth-token": Cookie.get("token"),
-        },
-      });
+      const response = await fetch(
+        `https://cryptic-thicket-69508.herokuapp.com/api/follow/${id}`,
+        {
+          method: "put",
+          headers: {
+            "auth-token": Cookie.get("token"),
+          },
+        }
+      );
       if (response.status) {
         setUnFollow();
         setSubmitFollow(false);
@@ -121,12 +130,15 @@ export const PodcastDetail = () => {
   const onUnlike = async (id) => {
     setSubmit(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/likes/${id}`, {
-        method: "put",
-        headers: {
-          "auth-token": Cookie.get("token"),
-        },
-      });
+      const response = await fetch(
+        `https://cryptic-thicket-69508.herokuapp.com/api/likes/${id}`,
+        {
+          method: "put",
+          headers: {
+            "auth-token": Cookie.get("token"),
+          },
+        }
+      );
 
       if (response.status) {
         setUnLike();
@@ -148,7 +160,7 @@ export const PodcastDetail = () => {
           <Flex justifyContent="center" mt="11%" className="wrap">
             <Flex className="section-1" flexDirection="column">
               <Image
-                src={`http://localhost:5000/${dataPodcast.coverImage}`}
+                src={`https://cryptic-thicket-69508.herokuapp.com/${dataPodcast.coverImage}`}
                 size="300px"
                 objectFit="cover"
                 rounded="20px"
@@ -271,7 +283,7 @@ export const PodcastDetail = () => {
               <Flex align="center" justifyContent="center" mb="20px">
                 <audio
                   controlsList="nodownload"
-                  src={`http://localhost:5000/${dataPodcast.audio}`}
+                  src={`https://cryptic-thicket-69508.herokuapp.com/${dataPodcast.audio}`}
                   controls
                   color={color[colorMode]}
                 >

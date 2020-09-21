@@ -105,13 +105,16 @@ export function DrawerUpload() {
       formData.append("coverImage", data.cover[0]);
       formData.append("description", data.descInput);
 
-      const response = await fetch("http://localhost:5000/api/podcast/", {
-        method: "post",
-        headers: {
-          "auth-token": Cookie.get("token"),
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://cryptic-thicket-69508.herokuapp.com/api/podcast/",
+        {
+          method: "post",
+          headers: {
+            "auth-token": Cookie.get("token"),
+          },
+          body: formData,
+        }
+      );
       const result = await response.json();
 
       if (result.status) {

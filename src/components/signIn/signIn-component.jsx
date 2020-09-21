@@ -52,7 +52,7 @@ export const SignIn = () => {
     const { emailInput, passwordInput } = data;
     try {
       const response = await fetch(
-        "http://localhost:5000/api/user/auth/login",
+        "https://cryptic-thicket-69508.herokuapp.com/api/user/auth/login",
         {
           method: "post",
           headers: { "Content-Type": "application/json" },

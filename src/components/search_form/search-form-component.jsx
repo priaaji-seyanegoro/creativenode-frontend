@@ -30,7 +30,7 @@ export const SearchFrom = () => {
     setSubmit(true);
     try {
       const search = await fetch(
-        `http://localhost:5000/api/podcast/search?q=${searchInput}`,
+        `https://cryptic-thicket-69508.herokuapp.com/api/podcast/search?q=${searchInput}`,
         {
           method: "get",
         }

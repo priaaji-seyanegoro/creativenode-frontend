@@ -18,12 +18,15 @@ const podcastModel = {
   fetchPodcast: thunk(async (actions) => {
     actions.setIsLoading(true);
     actions.setPodcast([]);
-    const res = await fetch("http://localhost:5000/api/podcast/", {
-      method: "get",
-      headers: {
-        "auth-token": Cookie.get("token"),
-      },
-    });
+    const res = await fetch(
+      "https://cryptic-thicket-69508.herokuapp.com/api/podcast/",
+      {
+        method: "get",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      }
+    );
 
     const dataPodcast = await res.json();
 
@@ -36,9 +39,12 @@ const podcastModel = {
   fetchTrendingPodcast: thunk(async (actions) => {
     actions.setIsLoading(true);
     actions.setPodcast([]);
-    const res = await fetch("http://localhost:5000/api/podcast/trending", {
-      method: "get",
-    });
+    const res = await fetch(
+      "https://cryptic-thicket-69508.herokuapp.com/api/podcast/trending",
+      {
+        method: "get",
+      }
+    );
 
     const dataPodcast = await res.json();
 
@@ -51,12 +57,15 @@ const podcastModel = {
   fetchYourPodcast: thunk(async (actions) => {
     actions.setIsLoading(true);
     actions.setPodcast([]);
-    const res = await fetch("http://localhost:5000/api/podcast/yourPodcast", {
-      method: "get",
-      headers: {
-        "auth-token": Cookie.get("token"),
-      },
-    });
+    const res = await fetch(
+      "https://cryptic-thicket-69508.herokuapp.com/api/podcast/yourPodcast",
+      {
+        method: "get",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      }
+    );
 
     const dataPodcast = await res.json();
 
@@ -68,12 +77,15 @@ const podcastModel = {
 
   fetchPodcastById: thunk(async (actions, id) => {
     actions.setIsLoading(true);
-    const response = await fetch(`http://localhost:5000/api/podcast/${id}`, {
-      method: "get",
-      headers: {
-        "auth-token": Cookie.get("token"),
-      },
-    });
+    const response = await fetch(
+      `https://cryptic-thicket-69508.herokuapp.com/api/podcast/${id}`,
+      {
+        method: "get",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      }
+    );
 
     const dataPodcast = await response.json();
     if (dataPodcast) {

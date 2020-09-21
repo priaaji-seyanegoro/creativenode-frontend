@@ -18,7 +18,7 @@ export const Item = ({ imageSrc, podcastName, title, id, keyId }) => {
       >
         <Box textAlign="center" mb="20px" className="trending-items">
           <Image
-            src={`http://localhost:5000/${imageSrc}`}
+            src={`https://cryptic-thicket-69508.herokuapp.com/${imageSrc}`}
             size="200px"
             objectFit="cover"
             rounded="20px"

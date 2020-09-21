@@ -68,12 +68,15 @@ export const Episodes = () => {
   }, []);
 
   const onDelete = async () => {
-    const response = await fetch(`http://localhost:5000/api/podcast/${id}`, {
-      method: "delete",
-      headers: {
-        "auth-token": Cookie.get("token"),
-      },
-    });
+    const response = await fetch(
+      `https://cryptic-thicket-69508.herokuapp.com/api/podcast/${id}`,
+      {
+        method: "delete",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      }
+    );
     const result = await response.json();
 
     if (result.status) {
@@ -83,12 +86,15 @@ export const Episodes = () => {
   };
 
   const getPodcastById = async (id) => {
-    const response = await fetch(`http://localhost:5000/api/podcast/${id}`, {
-      method: "get",
-      headers: {
-        "auth-token": Cookie.get("token"),
-      },
-    });
+    const response = await fetch(
+      `https://cryptic-thicket-69508.herokuapp.com/api/podcast/${id}`,
+      {
+        method: "get",
+        headers: {
+          "auth-token": Cookie.get("token"),
+        },
+      }
+    );
     const result = await response.json();
 
     setId(result._id);
@@ -100,7 +106,7 @@ export const Episodes = () => {
   const onUpdatePodcast = async (data) => {
     const { titleInput, descInput, podcastId } = data;
     const updated = await fetch(
-      `http://localhost:5000/api/podcast/${podcastId}`,
+      `https://cryptic-thicket-69508.herokuapp.com/api/podcast/${podcastId}`,
       {
         method: "PUT",
         headers: {

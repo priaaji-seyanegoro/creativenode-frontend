@@ -51,7 +51,7 @@ export const SignUp = () => {
       setSubmit(false);
     } else {
       const response = await fetch(
-        "http://localhost:5000/api/user/auth/register",
+        "https://cryptic-thicket-69508.herokuapp.com/api/user/auth/register",
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
