@@ -31,6 +31,7 @@ export const SectionItems = ({
             objectFit="cover"
             src={pathImage}
             alt="podcast logo"
+            fallbackSrc="https://via.placeholder.com/150"
             m="auto"
           />
         </Box>
