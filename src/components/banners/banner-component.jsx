@@ -57,7 +57,6 @@ export const Banner = () => {
             src="https://res.cloudinary.com/creative-node/image/upload/v1601640283/static_image_cn/podcast-img_gxpkhw.png"
             alt="podcast logo"
             m="auto"
-            fallbackSrc="https://via.placeholder.com/150"
           />
         </Box>
       </Flex>
