@@ -160,7 +160,7 @@ export const PodcastDetail = () => {
           <Flex justifyContent="center" mt="11%" className="wrap">
             <Flex className="section-1" flexDirection="column">
               <Image
-                src={`https://cryptic-thicket-69508.herokuapp.com/${dataPodcast.coverImage}`}
+                src={dataPodcast.coverImage}
                 size="300px"
                 objectFit="cover"
                 rounded="20px"
@@ -283,7 +283,7 @@ export const PodcastDetail = () => {
               <Flex align="center" justifyContent="center" mb="20px">
                 <audio
                   controlsList="nodownload"
-                  src={`https://cryptic-thicket-69508.herokuapp.com/${dataPodcast.audio}`}
+                  src={dataPodcast.audio}
                   controls
                   color={color[colorMode]}
                 >
