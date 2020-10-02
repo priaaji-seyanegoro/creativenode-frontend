@@ -20,7 +20,7 @@ export const CardContact = () => (
       <Image
         rounded="full"
         size="150px"
-        src="https://res.cloudinary.com/creative-node/image/upload/v1601641469/static_image_cn/pas_foto_xoh4qr.png"
+        src="https://res.cloudinary.com/creative-node/image/upload/v1601641930/static_image_cn/IMG_0100_biigwz.jpg"
         alt="priajisn"
         mb="20px"
       />
