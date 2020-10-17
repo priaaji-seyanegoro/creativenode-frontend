@@ -14,6 +14,9 @@ const podcastModel = {
   podcast: [],
   currentPodcast: [],
   isLoading: true,
+  page : 1,
+  noData : false,
+  waitData : false,
 
   fetchPodcast: thunk(async (actions) => {
     actions.setIsLoading(true);
@@ -34,6 +37,46 @@ const podcastModel = {
       actions.setPodcast(dataPodcast.podcast);
       actions.setIsLoading(false);
     }
+  }),
+
+  loadPodcastMore : thunk(async (actions, getPage) => {
+    actions.setWaitData(true);
+    const newPage = getPage + 1;
+  
+    const res = await fetch(`https://cryptic-thicket-69508.herokuapp.com/api/podcast/?page=${newPage}`, {
+      method: "get",
+      headers: {
+        "auth-token": Cookie.get("token"),
+      },
+    })
+
+    const newDataPodcast = await res.json();
+    const newListPodcast = newDataPodcast.podcast;
+    console.log(newListPodcast);
+    actions.addMorePodcastData(newListPodcast);
+    actions.addPage(newPage);
+    
+  }),
+
+  
+  addMorePodcastData: action( (state , newDataPodcast) => {
+   
+    if(newDataPodcast.length === 0 ){
+      console.log(newDataPodcast)
+      state.noData = true;
+    }else{
+      state.podcast = [...state.podcast , ...newDataPodcast]
+    }
+  }),
+
+  addPage : action ((state , nPage) => {
+    console.log("newPage" , nPage);
+    state.page = nPage;
+    state.waitData = false;
+  }),
+
+  setWaitData : action ((state , status) => {
+    state.waitData = status;
   }),
 
   fetchTrendingPodcast: thunk(async (actions) => {

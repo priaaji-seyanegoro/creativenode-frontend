@@ -12,13 +12,29 @@ export const DashboardItems = () => {
     (actions) => actions.podcast.fetchPodcast
   );
 
+  const loadPodcastMore = useStoreActions(
+    (actions) => actions.podcast.loadPodcastMore
+  );
+
   const dataPodcasts = useStoreState((state) => state.podcast.podcast);
   const isLoading = useStoreState((state) => state.podcast.isLoading);
+  const noData = useStoreState((state) => state.podcast.noData);
+  const waitData = useStoreState((state) => state.podcast.waitData);
+  const page = useStoreState((state) => state.podcast.page);
 
   useEffect(() => {
     fetchPodcast();
     // eslint-disable-next-line
   }, []);
+
+  window.onscroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+      if(!noData) {
+        console.log(noData);  
+        loadPodcastMore(page);
+      }
+    }
+  }
 
   if (isLoading) {
     return <DashboardSkelton />;
@@ -67,27 +83,35 @@ export const DashboardItems = () => {
     } else {
       return (
         <>
-          <Flex mt="20px" flexWrap="wrap" justifyContent="center">
-            {dataPodcasts.map((podcast, i) => {
-              return (
-                <Box
-                  className="dashboard-box"
-                  maxW="sm"
-                  overflow="hidden"
-                  mb="10px"
-                  mr="20px"
-                  key={podcast._id}
-                >
-                  <Item
-                    id={podcast._id}
-                    imageSrc={podcast.coverImage}
-                    podcastName={podcast.createdBy.namePodcast}
-                    title={podcast.title}
-                  />
-                </Box>
-              );
-            })}
+          <Flex flexDirection="column">
+            <Flex mt="20px" flexWrap="wrap" justifyContent="center">
+              {dataPodcasts.map((podcast, i) => {
+                return (
+                  <Box
+                    className="dashboard-box"
+                    maxW="sm"
+                    overflow="hidden"
+                    mb="10px"
+                    mr="20px"
+                    key={podcast._id}
+                  >
+                    <Item
+                      id={podcast._id}
+                      imageSrc={podcast.coverImage}
+                      podcastName={podcast.createdBy.namePodcast}
+                      title={podcast.title}
+                    />
+                  </Box>
+                );
+              })}
+            </Flex>
+
+            <Box>
+              {waitData ? <span>loading data ...</span> : "" }
+              {noData ? <span>no data anymore ...</span> : "" } 
+            </Box>
           </Flex>
+          
         </>
       );
     }

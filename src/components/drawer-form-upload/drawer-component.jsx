@@ -76,7 +76,8 @@ export function DrawerUpload() {
         isClosable: true,
       });
       return false;
-    } else if (data.audio[0].size > 60000000) {
+    } else if (data.audio[0].size > 53000000) {
+      console.log(data.audio[0].size);
       toast({
         title: "Warning file size",
         description:
