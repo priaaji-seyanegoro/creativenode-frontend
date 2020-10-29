@@ -14,6 +14,8 @@ import {
   Collapse,
   Badge,
   ButtonGroup,
+  IconButton,
+  useToast,
 } from "@chakra-ui/core";
 
 import { PodcastDetailSkelton } from "../components/skelton/podcastDetailSkelton";
@@ -25,6 +27,7 @@ export const PodcastDetail = () => {
   const handleToggle = () => setShow(!show);
   const [submit, setSubmit] = React.useState(false);
   const [submitFollow, setSubmitFollow] = React.useState(false);
+  const toast = useToast();
 
   const { colorMode } = useColorMode();
   const color = { light: "black", dark: "white" };
@@ -152,16 +155,35 @@ export const PodcastDetail = () => {
   const shareLink = () => {
     if(navigator.share){
       navigator.share({
-        title : 'tes',
-        text: 'test text',
-        url : 'tester url'
+        title : dataPodcast.title,
+        url : podcastId
       }).then(() => {
-        console.log('share success');
+        toast({
+          title: "Share Link Success",
+          status: "success",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
       }).catch((e) => {
-        console.log('error sharing', e);
+        toast({
+          title: `Share Link Error`,
+          description: {e},
+          status: "error",
+          position: "top",
+          duration: 3000,
+          isClosable: true,
+        });
       })
     }else{
-      console.log("your browsser doesnt support");
+      toast({
+        title: "Share Link Fail",
+        description: "Your Browser not support",
+        status: "warning",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }
 
@@ -251,20 +273,6 @@ export const PodcastDetail = () => {
                     </Button>
                   )}
 
-                  <Button
-                      
-                      leftIcon="external-link"
-                      className="menu-items"
-                      bg="transparent"
-                      border="1px"
-                      textTransform="uppercase"
-                      boxShadow="md"
-                      fontWeight="bold"
-                      onClick={shareLink}
-                    >
-                      Share
-                    </Button>
-
                   {dataPodcast.hasLike ? (
                     !submit ? (
                       <Button
@@ -308,6 +316,14 @@ export const PodcastDetail = () => {
                       Like
                     </Button>
                   )}
+
+                  <IconButton
+                    variant="outline"
+                    variantColor="teal"
+                    aria-label="Send email"
+                    icon="external-link"
+                    onClick={shareLink}
+                  />
                 </ButtonGroup>
               </Flex>
               <Flex align="center" justifyContent="center" mb="20px">
