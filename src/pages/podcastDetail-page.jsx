@@ -156,15 +156,9 @@ export const PodcastDetail = () => {
     if(navigator.share){
       navigator.share({
         title : dataPodcast.title,
-        url : podcastId
+        url : `https://creativenode.netlify.app/podcast/show/${podcastId}`
       }).then(() => {
-        toast({
-          title: "Share Link Success",
-          status: "success",
-          position: "top",
-          duration: 3000,
-          isClosable: true,
-        });
+        console.log('share success');
       }).catch((e) => {
         toast({
           title: `Share Link Error`,
