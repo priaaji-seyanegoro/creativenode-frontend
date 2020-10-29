@@ -149,6 +149,22 @@ export const PodcastDetail = () => {
     }
   };
 
+  const shareLink = () => {
+    if(navigator.share){
+      navigator.share({
+        title : 'tes',
+        text: 'test text',
+        url : 'tester url'
+      }).then(() => {
+        console.log('share success');
+      }).catch((e) => {
+        console.log('error sharing', e);
+      })
+    }else{
+      console.log("your browsser doesnt support");
+    }
+  }
+
   if (isLoading) {
     return <PodcastDetailSkelton />;
   } else {
@@ -234,6 +250,20 @@ export const PodcastDetail = () => {
                       Follow
                     </Button>
                   )}
+
+                  <Button
+                      
+                      leftIcon="external-link"
+                      className="menu-items"
+                      bg="transparent"
+                      border="1px"
+                      textTransform="uppercase"
+                      boxShadow="md"
+                      fontWeight="bold"
+                      onClick={shareLink}
+                    >
+                      Share
+                    </Button>
 
                   {dataPodcast.hasLike ? (
                     !submit ? (
