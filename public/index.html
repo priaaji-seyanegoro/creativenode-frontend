@@ -26,6 +26,19 @@
     -->
     <title>Creative Node</title>
   </head>
+  <!--config code onesignal-->
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "cc64a5fd-e997-4141-a2d9-f366cf963ec6",
+        notifyButton: {
+          enable: true,
+        },
+      });
+    });
+  </script>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
